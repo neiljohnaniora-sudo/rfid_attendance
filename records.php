@@ -87,7 +87,7 @@ if ($result && $result->num_rows > 0) {
         .btn-success { background-color: #10b981; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         
         .grades-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px; align-items: stretch; }
-        .table-container { display: flex; flex-direction: column; background: #fff; border-radius: 15px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 5px solid #3b82f6; border: 1px solid #f1f5f9; }
+        .table-container { display: flex; flex-direction: column; background: #fff; border-radius: 15px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 5px solid #3b82f6; border: 1px solid #f1f5f9; overflow-x: auto; }
         .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .table-header h2 { font-size: 18px; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 10px; }
         .control-input { padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; width: 200px; font-size: 14px; background: #f8fafc; }
@@ -130,7 +130,11 @@ if ($result && $result->num_rows > 0) {
 
         @media (max-width: 768px) {
             .grades-grid { grid-template-columns: 1fr; }
-            .header-buttons { margin-top: 15px; }
+            .header-buttons { margin-top: 15px; flex-direction: column; width: 100%; }
+            .header-buttons button { width: 100%; }
+            .top-header { flex-direction: column; align-items: flex-start !important; gap: 15px; }
+            .table-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .control-input { width: 100%; }
         }
     </style>
 </head>

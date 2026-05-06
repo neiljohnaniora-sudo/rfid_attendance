@@ -70,8 +70,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
 }
 ?>
 
+<style>
+    @media (max-width: 768px) {
+        .users-header {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 15px;
+        }
+        .users-header button {
+            width: 100%;
+            justify-content: center;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .modal-box {
+            width: 90% !important;
+            margin: 20% auto !important;
+        }
+    }
+</style>
+
 <div class="main-content" style="padding: 30px; font-family: 'Inter', sans-serif; background-color: #f8fafc; min-height: 100vh;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div class="users-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <div>
             <h2 style="color: #1e3a8a; font-weight: 800; font-size: 26px; margin: 0;">User Accounts</h2>
             <p style="color: #64748b; font-size: 14px;">Manage teacher permissions and grade assignments.</p>
@@ -81,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
         </button>
     </div>
 
-    <div style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e2e8f0;">
+    <div class="table-container" style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e2e8f0;">
         <table style="width: 100%; border-collapse: collapse; text-align: left;">
             <thead style="background: #f8fafc; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">
                 <tr>
@@ -133,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
 </div>
 
 <div id="addModal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);">
-    <div style="background: white; width: 400px; margin: 5% auto; padding: 30px; border-radius: 20px;">
+    <div class="modal-box" style="background: white; width: 400px; margin: 5% auto; padding: 30px; border-radius: 20px;">
         <h3 style="color: #1e3a8a; margin-top: 0;">Add New Account</h3>
         <form method="POST">
             <input type="text" name="full_name" placeholder="Full Name" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;" required>
@@ -166,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
 </div>
 
 <div id="editModal" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);">
-    <div style="background: white; width: 400px; margin: 10% auto; padding: 30px; border-radius: 20px;">
+    <div class="modal-box" style="background: white; width: 400px; margin: 10% auto; padding: 30px; border-radius: 20px;">
         <h3 style="color: #1e3a8a; margin-top: 0;">Edit User Details</h3>
         <form method="POST">
             <input type="hidden" name="user_id" id="edit_id">

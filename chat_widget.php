@@ -32,6 +32,7 @@
         bottom: 90px; /* Gipataas gamay para di matabonan ang button */
         right: 20px;
         width: 320px;
+        max-width: 90vw;
         background: white;
         border: 1px solid #ccc;
         box-shadow: 0px 4px 8px rgba(0,0,0,0.2);

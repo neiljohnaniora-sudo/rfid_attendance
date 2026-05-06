@@ -192,9 +192,48 @@ if ($display_role === 'Admin') {
         from { opacity: 0; transform: translateY(8px); }
         to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Mobile Toggle Button */
+    .mobile-toggle {
+        display: none;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1001;
+        background: #1e3a8a;
+        color: white;
+        border: none;
+        padding: 10px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        .main-content {
+            margin-left: 0 !important;
+            padding: 20px !important;
+            padding-top: 70px !important;
+        }
+        .mobile-toggle {
+            display: block;
+        }
+    }
 </style>
 
-<div class="sidebar">
+<button class="mobile-toggle" onclick="toggleSidebar()">
+    <i class="fa-solid fa-bars"></i>
+</button>
+
+<div class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <h2><i class="fa-solid fa-graduation-cap" style="color: #60a5fa;"></i> SMART ATTENDANCE</h2>
     </div>
@@ -238,3 +277,17 @@ if ($display_role === 'Admin') {
         </button>
     </div>
 </div>
+
+<script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+    }
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', function(event) {
+        var sidebar = document.getElementById('sidebar');
+        var toggleBtn = document.querySelector('.mobile-toggle');
+        if (window.innerWidth <= 768 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
+            sidebar.classList.remove('open');
+        }
+    });
+</script>

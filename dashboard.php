@@ -38,6 +38,18 @@ if ($result && $result->num_rows > 0) {
             50% { transform: scale(1.05); opacity: 0.9; }
             100% { transform: scale(1); opacity: 1; }
         }
+        @media (max-width: 768px) {
+            .top-header {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 15px;
+            }
+            .live-scanner-container {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+        }
     </style>
 </head>
 <body style="background-color: #f1f5f9; margin: 0; font-family: 'Inter', sans-serif;">
@@ -56,7 +68,7 @@ if ($result && $result->num_rows > 0) {
             </div>
         </div>
         
-        <div style="background: #ffffff; border-radius: 15px; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 35px; display: flex; align-items: center; justify-content: space-between; border-left: 6px solid #3b82f6;">
+        <div class="live-scanner-container" style="background: #ffffff; border-radius: 15px; padding: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); margin-bottom: 35px; display: flex; align-items: center; justify-content: space-between; border-left: 6px solid #3b82f6;">
             <div style="flex: 1;">
                 <h2 style="color: #1e293b; margin-bottom: 10px; font-size: 22px;"><i class="fa-solid fa-wifi" style="color: #3b82f6; margin-right: 10px;"></i> Live Scanner</h2>
                 <p style="color: #64748b; font-size: 15px;"></p>

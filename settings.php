@@ -92,6 +92,11 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
         .update-btn:hover { background: #2563eb; }
         .btn-approve { background:#10b981; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; }
         .btn-decline { background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:5px; cursor:pointer; margin-left:5px; }
+        
+        @media (max-width: 768px) {
+            .settings-grid { grid-template-columns: 1fr; }
+            .btn-approve, .btn-decline { width: 100%; margin-top: 5px; margin-left: 0; box-sizing: border-box; }
+        }
     </style>
 </head>
 <body>

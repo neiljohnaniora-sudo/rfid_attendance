@@ -60,12 +60,19 @@ $result = $conn->query($sql);
         .page-nav button { background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-left: 8px; transition: 0.2s; }
         .page-nav button:hover:not(:disabled) { background: #eff6ff; border-color: #a5b4fc; }
         .page-nav button:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        @media (max-width: 768px) {
+            .filter-row { flex-direction: column; align-items: stretch; }
+            .btn-filter { width: 100%; }
+            .logs-header { flex-direction: column; align-items: flex-start !important; gap: 10px; }
+            .logs-header > div { text-align: left !important; }
+        }
     </style>
 </head>
 <body>
 
     <div class="main-content">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <div class="logs-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
             <div>
                 <h2 style="font-weight: 800; color: #1e293b; font-size: 28px;">Attendance Logs</h2>
                 <p style="color: #64748b;">Monitoring daily student attendance</p>

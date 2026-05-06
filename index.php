@@ -125,6 +125,10 @@
             .container.right-panel-active .sign-in-container { transform: none; opacity: 0; }
             .container.right-panel-active .sign-up-container { transform: none; opacity: 1; }
             .mobile-switch { display: block; }
+            .sign-in-container { z-index: 5; transition: opacity 0.3s; }
+            .sign-up-container { pointer-events: none; transition: opacity 0.3s; }
+            .container.right-panel-active .sign-in-container { z-index: 1; pointer-events: none; }
+            .container.right-panel-active .sign-up-container { pointer-events: auto; }
         }
     </style>
 </head>

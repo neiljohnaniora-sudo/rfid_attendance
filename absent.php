@@ -45,9 +45,7 @@ if ($result && $result->num_rows > 0) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f0f2f5; display: flex; height: 100vh; overflow: hidden; }
-        #sidebar-container { flex-shrink: 0; z-index: 10; width: 260px; }
-        .main-content { flex: 1; padding: 30px 40px; overflow-y: auto; position: relative; }
+        body { background-color: #f0f2f5; }
         
         .top-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .top-header h1 { color: #1e293b; font-size: 24px; }
@@ -85,17 +83,17 @@ if ($result && $result->num_rows > 0) {
 
         /* MOBILE */
         @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; overflow: auto; }
-            #sidebar-container { width: 100%; height: auto; }
-            .main-content { padding: 15px; }
             .grades-grid { grid-template-columns: 1fr; }
             .toolbar { flex-direction: column; align-items: stretch; }
             .badge-total { margin-left: 0; text-align: center; }
+            .top-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .btn-print { width: 100%; text-align: center; }
+            .table-wrapper { overflow-x: auto; }
         }
     </style>
 </head>
 <body>
-    <div id="sidebar-container"></div>
+    <?php include 'sidebar.php'; ?>
     <div class="main-content">
         <div class="top-header">
             <h1><i class="fa-solid fa-user-xmark" style="color: #ef4444;"></i> Absentees Record</h1>
@@ -150,14 +148,6 @@ if ($result && $result->num_rows > 0) {
         </div>
     </div>
 
-    <script>
-        fetch('sidebar.php').then(res => res.text()).then(data => {
-            document.getElementById('sidebar-container').innerHTML = data;
-            // Kung naa kay 'nav-absent' sa imong sidebar.php, e-active nato
-            let navAbsent = document.getElementById('nav-absent');
-            if(navAbsent) navAbsent.classList.add('active'); 
-        });
-    </script>
 
     <?php include 'chat_widget.php'; ?>
 </body>
