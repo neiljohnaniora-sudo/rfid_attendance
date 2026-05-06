@@ -1,18 +1,15 @@
 <?php
-$servername = "sqlXXX.infinityfree.com"; // Tan-awa sa control panel
-$username   = "if0_XXXXXX";              // Imong vPanel username
-$password   = "imong_password";          // Imong account password
-$dbname     = "if0_XXXXXX_attendance";   // Ang ngalan sa DB nga imong gihimo
+$servername = "mainline.proxy.rlwy.net";
+$username = "root";
+$password = "imong_railway_password_diri"; // I-paste ang tinuod nga password gikan sa Railway
+$dbname = "railway";
+$port = 57930;
 
-// Create connection gamit ang MySQLi
-$conn = new mysqli($host, $username, $password, $dbname);
+// Paghimo ug connection apil ang port
+$conn = new mysqli($servername, $username, $password, $dbname, $port);
 
-// Check connection
+// I-check kung naay error
 if ($conn->connect_error) {
-    // Kung naay error, ipakita kini
-    die("Connection failed: " . $conn->connect_error);
+  die("Connection failed: " . $conn->connect_error);
 }
-
-// Optional: I-set ang charset para dili maguba ang mga special characters
-$conn->set_charset("utf8");
 ?>
