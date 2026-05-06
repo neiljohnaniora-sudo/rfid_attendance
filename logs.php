@@ -41,7 +41,7 @@ $result = $conn->query($sql);
         /* Limpyo nga styles para sa table */
         .logs-card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
         .table-container { overflow-x: auto; margin-top: 20px; display: flex; flex-direction: column; min-height: 650px; }
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 700px; }
         th { background: #f8fafc; color: #64748b; font-size: 12px; text-transform: uppercase; padding: 15px; text-align: left; border-bottom: 2px solid #f1f5f9; }
         td { padding: 15px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 14px; }
         td:nth-child(2) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

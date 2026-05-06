@@ -196,7 +196,7 @@ if ($display_role === 'Admin') {
     /* Mobile Toggle Button */
     .mobile-toggle {
         display: none;
-        position: fixed;
+        position: absolute; /* Usbon from fixed para mo-scroll apil sa page */
         top: 15px;
         left: 15px;
         z-index: 1001;

@@ -92,7 +92,7 @@ if ($result && $result->num_rows > 0) {
         .table-header h2 { font-size: 18px; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 10px; }
         .control-input { padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; width: 200px; font-size: 14px; background: #f8fafc; }
         
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 600px; }
         th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         th { color: #64748b; font-size: 12px; text-transform: uppercase; background: #f8fafc; font-weight: 700; letter-spacing: 0.5px; }
         .badge-active { background: #dcfce7; color: #166534; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; }

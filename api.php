@@ -1,14 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "school_attendance"; // Base sa imong SQL dump
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require 'connection.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['uid'])) {
     $uid = $_POST['uid'];

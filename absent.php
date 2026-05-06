@@ -63,7 +63,7 @@ if ($result && $result->num_rows > 0) {
         
         /* SCROLLABLE TABLE */
         .table-wrapper { max-height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 6px; }
-        table { width: 100%; border-collapse: collapse; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
         th, td { padding: 10px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
         th { position: sticky; top: 0; background: #f8fafc; color: #64748b; font-size: 12px; text-transform: uppercase; font-weight: bold; box-shadow: 0 1px 0 #e2e8f0; z-index: 1; }
         tr:hover { background-color: #fef2f2; }
