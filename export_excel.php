@@ -1,5 +1,5 @@
 <?php
-// Connect to your database (change to 'db_config.php' if that's what you normally use)
+// Connect to your database
 require 'connection.php';
 
 // Set headers to tell the browser to download a CSV file instead of displaying a web page
