@@ -121,7 +121,7 @@ if ($result && $result->num_rows > 0) {
         .page-nav button:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* Modal Settings */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); z-index: 1050; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal-box { background: #fff; padding: 35px; border-radius: 15px; width: 100%; max-width: 420px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
         .form-group { margin-bottom: 20px; } 
         .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; color: #475569; }
@@ -415,18 +415,18 @@ if ($result && $result->num_rows > 0) {
                     lastTapTimestamp = data.timestamp;
                     
                     // I-check kung rehistrado na ba daan ang card
-                    if (data.action !== 'ERROR') {
+                    if (data.action !== 'REGISTER') {
                         Swal.fire({
-                            icon: 'info',
-                            title: 'Card in Use',
-                            text: 'This ID is already registered to ' + data.name + '!',
-                            timer: 3000,
-                            showConfirmButton: false
+                            icon: 'warning',
+                            title: 'Card Already Assigned',
+                            text: `This RFID card is currently registered to ${data.name}. Please tap a new, unregistered card.`,
+                            confirmButtonColor: '#8b5cf6',
+                            confirmButtonText: 'Got it'
                         });
                         return; // Maghulat og bag-ong tap
                     }
 
-                    // Kung ERROR ang action sa json (pasabot Unregistered Card)
+                    // Kung REGISTER ang action sa json (pasabot Unregistered Card)
                     document.getElementById('tapStatus').style.display = 'none';
                     document.getElementById('tapForm').style.display = 'block';
                     document.getElementById('tapRfidInput').value = data.rfid;

@@ -112,8 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
     </div>
 
     <div class="table-container" style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e2e8f0;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 700px;">
-            <thead style="background: #f8fafc; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 850px;">
+            <thead style="background: #f8fafc; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9; white-space: nowrap;">
                 <tr>
                     <th style="padding: 20px;">Name & ID</th>
                     <th style="padding: 20px;">Username</th>
