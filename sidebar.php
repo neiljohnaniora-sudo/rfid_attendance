@@ -217,7 +217,7 @@ if ($display_role === 'Admin') {
     /* Mobile Toggle Button */
     .mobile-toggle {
         display: none;
-        position: fixed; /* I-fix gyud aron dili mawala inig scroll */
+        position: absolute; /* Ibalik sa absolute aron mo-scroll apil sa page */
         top: 15px;
         left: 15px;
         z-index: 1001;
