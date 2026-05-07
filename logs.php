@@ -36,7 +36,6 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Logs</title>
-    <?php include 'sidebar.php'; ?>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -84,6 +83,8 @@ $result = $conn->query($sql);
     </style>
 </head>
 <body>
+
+    <?php include 'sidebar.php'; ?>
 
     <div class="main-content">
         <div class="logs-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">

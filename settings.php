@@ -74,8 +74,6 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - Smart Attendance</title>
-    
-    <?php include 'sidebar.php'; ?>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -114,6 +112,8 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
     </style>
 </head>
 <body>
+
+    <?php include 'sidebar.php'; ?>
 
     <div class="main-content">
         <div class="settings-container">

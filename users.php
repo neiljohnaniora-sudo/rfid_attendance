@@ -75,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Accounts - Smart Attendance</title>
-    <?php include 'sidebar.php'; ?>
 
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,6 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
 </style>
 </head>
 <body style="background-color: #f8fafc; margin: 0; font-family: 'Inter', sans-serif;">
+
+<?php include 'sidebar.php'; ?>
 
 <div class="main-content" style="padding: 30px; font-family: 'Inter', sans-serif; background-color: #f8fafc; min-height: 100vh;">
     <div class="users-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">

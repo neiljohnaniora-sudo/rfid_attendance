@@ -78,7 +78,6 @@ if ($result && $result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Records - Smart RFID Attendance</title>
-    <?php include 'sidebar.php'; ?>
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -153,6 +152,8 @@ if ($result && $result->num_rows > 0) {
     </style>
 </head>
 <body>
+
+    <?php include 'sidebar.php'; ?>
 
     <div class="main-content">
         <div class="top-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px;">
