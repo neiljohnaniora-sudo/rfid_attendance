@@ -1,20 +1,19 @@
 <?php
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-$servername = "mainline.proxy.rlwy.net";
-$username = "root";
-$password = "bIadgPoRRsOhYqzVKiXrDIONEROJgJnm"; // I-paste ang tinuod nga password gikan sa Railway
-$dbname = "railway";
-$port = 57930;
+// Dili na nato i-hardcode, getenv() na atong gamiton
+$servername = getenv('MYSQLHOST');
+$username   = getenv('MYSQLUSER');
+$password   = getenv('MYSQLPASSWORD');
+$dbname     = getenv('MYSQLDATABASE');
+$port       = getenv('MYSQLPORT');
 
-// Paghimo ug connection apil ang port
+// Paghimo ug connection gamit ang mga variables
 $conn = new mysqli($servername, $username, $password, $dbname, $port);
 
-// I-check kung naay error
 if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 ?>
