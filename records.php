@@ -79,6 +79,20 @@ if ($result && $result->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Records - Smart RFID Attendance</title>
     <?php include 'sidebar.php'; ?>
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script>
+      // I-register ang Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service worker registered', reg))
+            .catch(err => console.log('Service worker not registered', err));
+        });
+      }
+    </script>
     
     <style>
         /* Dugang nga styles para sa Records ra */

@@ -77,6 +77,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
     <title>User Accounts - Smart Attendance</title>
     <?php include 'sidebar.php'; ?>
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <script>
+      // I-register ang Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js')
+            .then(reg => console.log('Service worker registered', reg))
+            .catch(err => console.log('Service worker not registered', err));
+        });
+      }
+    </script>
+
 <style>
     @media (max-width: 768px) {
         .users-header {
