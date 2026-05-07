@@ -58,6 +58,7 @@ if ($display_role === 'Admin') {
         padding: 35px 20px; 
         text-align: center; 
         border-bottom: 1px solid rgba(255,255,255,0.08); 
+        position: relative;
     }
     .sidebar-header h2 { 
         font-size: 18px; 
@@ -193,6 +194,26 @@ if ($display_role === 'Admin') {
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Close Button for Mobile Sidebar */
+    .close-sidebar { display: none; }
+
+    @media (max-width: 768px) {
+        .close-sidebar {
+            display: block;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+        .sidebar-header h2 { margin-top: 15px; } /* Dugang space para di ma-ipit sa arrow */
+    }
+
     /* Mobile Toggle Button */
     .mobile-toggle {
         display: none;
@@ -235,6 +256,9 @@ if ($display_role === 'Admin') {
 
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header">
+        <button class="close-sidebar" onclick="toggleSidebar()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
         <h2><i class="fa-solid fa-graduation-cap" style="color: #60a5fa;"></i> SMART ATTENDANCE</h2>
     </div>
     
@@ -280,14 +304,26 @@ if ($display_role === 'Admin') {
 
 <script>
     function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
+        var sidebar = document.getElementById('sidebar');
+        var toggleBtn = document.querySelector('.mobile-toggle');
+        sidebar.classList.toggle('open');
+        
+        // Tago-on ang menu icon kung abli ang sidebar aron dili magsapaw
+        if (sidebar.classList.contains('open')) {
+            toggleBtn.style.display = 'none';
+        } else {
+            toggleBtn.style.display = 'block';
+        }
     }
     // Close sidebar when clicking outside on mobile
     document.addEventListener('click', function(event) {
         var sidebar = document.getElementById('sidebar');
         var toggleBtn = document.querySelector('.mobile-toggle');
         if (window.innerWidth <= 768 && !sidebar.contains(event.target) && !toggleBtn.contains(event.target)) {
-            sidebar.classList.remove('open');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                toggleBtn.style.display = 'block'; // Ibalik ang icon kung ma-close
+            }
         }
     });
 </script>

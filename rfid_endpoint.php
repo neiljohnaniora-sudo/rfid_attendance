@@ -138,9 +138,16 @@ if (isset($_GET['rfid'])) {
         }
         
     } else {
-        // Unregistered o Inactive nga RFID
-        $action = "ERROR";
-        echo "ERROR: Unregistered Card Detected";
+        // 👉 [ACTION: REGISTRATION]
+        // Wala sa database ang RFID, pasabot bag-o ni nga card.
+        $action = "REGISTER";
+        $status = "Pending";
+        
+        // I-save ang bag-ong ID sa usa ka temporary text file aron makuha sa imong Add Student Dashboard
+        file_put_contents('temp_rfid.txt', $rfid);
+        
+        // I-echo ang word nga REGISTERED aron ma-basa sa ESP32 ug ma-display sa LCD
+        echo "REGISTERED: New Card Scanned";
     }
 
     /**
