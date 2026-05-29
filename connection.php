@@ -7,7 +7,7 @@ $servername = getenv('MYSQLHOST') ?: "zephyr.proxy.rlwy.net";
 $username   = getenv('MYSQLUSER') ?: "root";
 $password   = getenv('MYSQLPASSWORD') ?: "kjQlEasVoQranHLlCyIowNZcfJmCoHEJ";
 $dbname     = getenv('MYSQLDATABASE') ?: "railway";
-$port       = getenv('MYSQLPORT') ?: 28873;
+$port       = getenv('MYSQLPORT') ?: 3306;
 
 // Paghimo ug connection gamit ang mga variables
 $conn = new mysqli($servername, $username, $password, $dbname, $port);
