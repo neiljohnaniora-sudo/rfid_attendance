@@ -233,12 +233,20 @@ if ($result && $result->num_rows > 0) {
                         details = `You have already logged out today.`;
                     } 
                     else if (data.action === "ERROR") {
-                        // 👉 IF AN UNREGISTERED CARD TAPS
-                        actionText = "UNREGISTERED ID!";
-                        colorTheme = "#ef4444"; // Red
-                        bgTheme = "#fee2e2";
-                        icon = "fa-circle-xmark";
-                        details = `Please register ID: <span style="color: red; font-family: monospace;">${data.rfid}</span>`;
+                        if (data.status === "Too Early") {
+                            actionText = "TOO EARLY!";
+                            colorTheme = "#f97316"; // Orange
+                            bgTheme = "#fff7ed";
+                            icon = "fa-clock";
+                            details = `Cannot time out yet. Please wait.`;
+                        } else {
+                            // 👉 IF AN UNREGISTERED CARD TAPS
+                            actionText = "UNREGISTERED ID!";
+                            colorTheme = "#ef4444"; // Red
+                            bgTheme = "#fee2e2";
+                            icon = "fa-circle-xmark";
+                            details = `Please register ID: <span style="color: red; font-family: monospace;">${data.rfid}</span>`;
+                        }
                     }
 
                     // DISPLAY THE BOX

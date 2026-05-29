@@ -7,6 +7,12 @@ if (isset($_POST['rfid'])) {
     $today = date('Y-m-d');
     $current_time = date('H:i:s');
 
+    // KUHAON ANG SETTINGS NGA GIBUTANG SA ADMIN
+    $time_settings = ['late_time' => '08:00', 'timeout_start' => '15:00'];
+    if (file_exists('time_settings.json')) {
+        $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
+    }
+
     // Pangitaon ang student gamit ang RFID
     $student_query = $conn->query("SELECT * FROM students WHERE rfid = '$rfid' AND status = 'Active'");
     
@@ -22,6 +28,12 @@ if (isset($_POST['rfid'])) {
             
             // Kung wala pay Time-Out (NULL o '00:00:00'), i-update ang row para butangan ug Time-Out
             if (empty($log['time_out']) || $log['time_out'] == '00:00:00') {
+                
+                if (strtotime($current_time) < strtotime($time_settings['timeout_start'] . ':00')) {
+                    echo json_encode(['success' => false, 'message' => "Too Early to Time Out!<br>Wait until " . date("h:i A", strtotime($time_settings['timeout_start']))]);
+                    exit();
+                }
+
                 $conn->query("UPDATE attendance_logs SET time_out = '$current_time' WHERE id = " . $log['id']);
                 echo json_encode(['success' => true, 'message' => "Time Out Success:<br>$student_name"]);
                 exit();
@@ -32,7 +44,7 @@ if (isset($_POST['rfid'])) {
         } else {
             // Kung wala pay record karong adlawa, mag insert ug Time-In
             // Ma-Late kung lapas na sa 8:00 AM
-            $status = ($current_time > '08:00:00') ? 'Late' : 'On Time';
+            $status = (strtotime($current_time) > strtotime($time_settings['late_time'] . ':00')) ? 'Late' : 'On Time';
             
             $conn->query("INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 
                           VALUES ('$today', '$rfid', '$student_name', '$current_time', '$status')");

@@ -55,6 +55,12 @@ if (isset($_GET['rfid'])) {
     
     $rfid = $conn->real_escape_string($_GET['rfid']);
     
+    // KUHAON ANG SETTINGS NGA GIBUTANG SA ADMIN
+    $time_settings = ['late_time' => '08:00', 'timeout_start' => '15:00'];
+    if (file_exists('time_settings.json')) {
+        $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
+    }
+    
     // A. PANGITAON ANG ESTUDYANTE SA DATABASE
     $student_query = "SELECT name, guardian_email FROM students WHERE rfid = '$rfid' AND status = 'Active' LIMIT 1";
     $student_res = $conn->query($student_query);
@@ -85,24 +91,32 @@ if (isset($_GET['rfid'])) {
             // I-check kung blangko pa ba ang Time Out
             if (empty($log['time_out']) || $log['time_out'] == '00:00:00') {
                 
-                // 👉 [ACTION: TIME OUT]
-                $log_id = $log['id'];
-                $update_sql = "UPDATE attendance_logs SET time_out = '$current_time' WHERE id = '$log_id'";
-                
-                if ($conn->query($update_sql) === TRUE) {
-                    $action = "TIME OUT";
-                    
-                    // Trigger Email Notification para sa Guardian
-                    if (!empty($guardian_email)) {
-                        $subject = "Attendance Alert: TIME OUT - " . $student_name;
-                        $msg = "Maayong adlaw,\n\nPahibalo: Ang imong anak nga si $student_name kay nakagawas na sa eskwelahan (TIME OUT) karong $display_time.\n\nDaghang salamat,\nSmart Attendance System";
-                        sendEmailNotification($guardian_email, $subject, $msg);
-                    }
-                    echo "SUCCESS: Time Out - " . $student_name;
+                // I-CHECK KUNG SAYO PA BA KAAYO PARA MAG TIME OUT
+                if (strtotime($current_time) < strtotime($time_settings['timeout_start'] . ':00')) {
+                    $action = "ERROR";
+                    $status = "Too Early";
+                    echo "WARNING: Too early to time out!";
                 } else {
-                    file_put_contents('db_error.txt', "UPDATE ERR: " . $conn->error . "\n", FILE_APPEND);
-                    echo "ERROR: Database Update Failed";
-                    exit();
+                    
+                    // 👉 [ACTION: TIME OUT]
+                    $log_id = $log['id'];
+                    $update_sql = "UPDATE attendance_logs SET time_out = '$current_time' WHERE id = '$log_id'";
+                    
+                    if ($conn->query($update_sql) === TRUE) {
+                        $action = "TIME OUT";
+                        
+                        // Trigger Email Notification para sa Guardian
+                        if (!empty($guardian_email)) {
+                            $subject = "Attendance Alert: TIME OUT - " . $student_name;
+                            $msg = "Maayong adlaw,\n\nPahibalo: Ang imong anak nga si $student_name kay nakagawas na sa eskwelahan (TIME OUT) karong $display_time.\n\nDaghang salamat,\nSmart Attendance System";
+                            sendEmailNotification($guardian_email, $subject, $msg);
+                        }
+                        echo "SUCCESS: Time Out - " . $student_name;
+                    } else {
+                        file_put_contents('db_error.txt', "UPDATE ERR: " . $conn->error . "\n", FILE_APPEND);
+                        echo "ERROR: Database Update Failed";
+                        exit();
+                    }
                 }
 
             } else {
@@ -115,7 +129,7 @@ if (isset($_GET['rfid'])) {
             
             // 👉 [ACTION: TIME IN]
             // I-set kung Late ba (after 8:00 AM) o On Time
-            $status = (strtotime($current_time) > strtotime('08:00:00')) ? 'Late' : 'On Time';
+            $status = (strtotime($current_time) > strtotime($time_settings['late_time'] . ':00')) ? 'Late' : 'On Time';
             
             $insert_sql = "INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 
                            VALUES ('$today', '$rfid', '$student_name', '$current_time', '$status')";

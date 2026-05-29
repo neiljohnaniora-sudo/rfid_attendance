@@ -34,7 +34,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
     }
 }
 
-// 2. APPROVAL/DECLINE LOGIC
+// 2. TIME LIMITS SETTINGS LOGIC
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_time_settings'])) {
+    $time_settings = [
+        'late_time' => $_POST['late_time'],
+        'timeout_start' => $_POST['timeout_start']
+    ];
+    file_put_contents('time_settings.json', json_encode($time_settings));
+    $_SESSION['status_alert'] = 'time_updated';
+    header("Location: settings.php");
+    exit();
+}
+
+// 3. APPROVAL/DECLINE LOGIC
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action_user'])) {
     $target_id = $_POST['target_user_id'];
     $action = $_POST['action_type'];
@@ -59,6 +71,8 @@ if (isset($_SESSION['status_alert'])) {
         $alert_script = "Swal.fire({ icon: 'success', title: 'Updated!', text: 'Profile updated successfully!', showConfirmButton: false, timer: 1500 });";
     } elseif ($_SESSION['status_alert'] == 'action_success') {
         $alert_script = "Swal.fire({ icon: 'success', title: 'Success!', text: 'User status updated.', showConfirmButton: false, timer: 1500 });";
+    } elseif ($_SESSION['status_alert'] == 'time_updated') {
+        $alert_script = "Swal.fire({ icon: 'success', title: 'Saved!', text: 'Attendance time limits updated successfully.', showConfirmButton: false, timer: 1500 });";
     }
     unset($_SESSION['status_alert']); // I-DELETE DAYON PARA DILI MO-REPEAT SA REFRESH
 }
@@ -132,6 +146,29 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
                         <div class="form-group"><label>Phone</label><input type="text" name="phone" value="<?php echo htmlspecialchars($admin['phone']); ?>"></div>
                         <div class="form-group"><label>New Password</label><input type="password" name="password" placeholder="Leave blank to keep current"></div>
                         <button type="submit" name="update_profile" class="update-btn">Save Changes</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3 class="section-title"><i class="fa-solid fa-clock"></i> Attendance Time Limits</h3>
+                    <form method="POST">
+                        <?php
+                        $time_settings = ['late_time' => '08:00', 'timeout_start' => '15:00'];
+                        if (file_exists('time_settings.json')) {
+                            $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
+                        }
+                        ?>
+                        <div class="form-group">
+                            <label>Mark as "Late" After (Time In)</label>
+                            <input type="time" name="late_time" value="<?php echo htmlspecialchars($time_settings['late_time']); ?>" required>
+                            <small style="color: #94a3b8; font-size: 11px;">Students arriving after this time are marked as Late.</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Minimum Time-Out Allowed</label>
+                            <input type="time" name="timeout_start" value="<?php echo htmlspecialchars($time_settings['timeout_start']); ?>" required>
+                            <small style="color: #94a3b8; font-size: 11px;">Prevents accidental double-taps by rejecting Time Out before this time.</small>
+                        </div>
+                        <button type="submit" name="update_time_settings" class="update-btn" style="background: #10b981;">Save Time Settings</button>
                     </form>
                 </div>
 
