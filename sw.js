@@ -1,4 +1,4 @@
-const cacheName = 'attendance-v2'; // Gi-update ngadto sa v2 aron ma-refresh ang cache
+const cacheName = 'attendance-v3'; // Gi-update ngadto sa v3 aron ma-load ang bag-ong loading screen
 // Gamay lang sa ang assets para dili mag-error sa install
 const assets = [
   './',
