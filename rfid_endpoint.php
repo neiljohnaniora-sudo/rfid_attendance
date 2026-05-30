@@ -109,7 +109,7 @@ if (isset($_GET['rfid'])) {
                         // Trigger Email Notification para sa Guardian
                         if (!empty($guardian_email)) {
                             $subject = "Attendance Alert: TIME OUT - " . $student_name;
-                            $msg = "Maayong adlaw,\n\nPahibalo: Ang imong anak nga si $student_name kay nakagawas na sa eskwelahan (TIME OUT) karong $display_time.\n\nDaghang salamat,\nSmart Attendance System";
+                            $msg = "Good day,\n\nNotice: Your child, $student_name, has safely logged OUT of the school premises today at $display_time.\n\nThank you,\nSmart Attendance System";
                             sendEmailNotification($guardian_email, $subject, $msg);
                         }
                         echo "SUCCESS: Time Out - " . $student_name;
@@ -141,7 +141,7 @@ if (isset($_GET['rfid'])) {
                 // Trigger Email Notification para sa Guardian
                 if (!empty($guardian_email)) {
                     $subject = "Attendance Alert: TIME IN - " . $student_name;
-                    $msg = "Maayong adlaw,\n\nPahibalo: Ang imong anak nga si $student_name kay luwas nga nakasulod sa eskwelahan (TIME IN) karong $display_time.\nStatus: $status\n\nDaghang salamat,\nSmart Attendance System";
+                    $msg = "Good day,\n\nNotice: Your child, $student_name, has safely logged IN to the school premises today at $display_time.\nStatus: $status\n\nThank you,\nSmart Attendance System";
                     sendEmailNotification($guardian_email, $subject, $msg);
                 }
                 echo "SUCCESS: Time In - " . $student_name;

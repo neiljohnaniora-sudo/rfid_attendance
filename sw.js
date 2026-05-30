@@ -1,4 +1,4 @@
-const cacheName = 'attendance-v1';
+const cacheName = 'attendance-v2'; // Gi-update ngadto sa v2 aron ma-refresh ang cache
 // Gamay lang sa ang assets para dili mag-error sa install
 const assets = [
   './',
