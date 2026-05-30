@@ -252,6 +252,10 @@
                     <input type="email" name="email" placeholder="example@email.com" required />
                 </div>
                 <div class="input-group">
+                    <label>Institutional Email</label>
+                    <input type="email" name="institutional_email" placeholder="example@deped.gov.ph" />
+                </div>
+                <div class="input-group">
                     <label>Password</label>
                     <input type="password" name="password" placeholder="••••••••" required />
                 </div>

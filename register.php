@@ -6,6 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $phone = $_POST['phone'];
     $address = $_POST['address'];
+    $institutional_email = $_POST['institutional_email'] ?? '';
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     
     // KINI ANG BAG-O: Kuhaon ang assigned grade
@@ -16,9 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = 'Pending';
 
     // Gi-apil na ang assigned_grade sa INSERT query
-    $sql = "INSERT INTO admins (full_name, email, phone, address, password, role, assigned_grade, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO admins (full_name, email, institutional_email, phone, address, password, role, assigned_grade, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssssssss", $full_name, $email, $phone, $address, $password, $role, $assigned_grade, $status);
+    $stmt->bind_param("sssssssss", $full_name, $email, $institutional_email, $phone, $address, $password, $role, $assigned_grade, $status);
 
     echo "<!DOCTYPE html><html><head>
     <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>

@@ -11,7 +11,8 @@ $admin_id = $_SESSION['admin_id'];
 $admin_role = $_SESSION['admin_role'];
 // 1. PROFILE UPDATE LOGIC
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
-    $full_name = $_POST['full_name']; $email = $_POST['email']; $phone = $_POST['phone']; $address = $_POST['address'] ?? '';
+    $full_name = $_POST['full_name']; $email = $_POST['email']; $phone = $_POST['phone']; 
+    $address = $_POST['address'] ?? ''; $institutional_email = $_POST['institutional_email'] ?? '';
     $profile_pic_path = null;
 
     if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] == 0) {
@@ -20,8 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
         if (move_uploaded_file($_FILES["profile_pic"]["tmp_name"], $target_file)) $profile_pic_path = $target_file; 
     }
     
-    $query = "UPDATE admins SET full_name=?, email=?, phone=?, address=?";
-    $params = [$full_name, $email, $phone, $address]; $types = "ssss";
+    $query = "UPDATE admins SET full_name=?, email=?, phone=?, address=?, institutional_email=?";
+    $params = [$full_name, $email, $phone, $address, $institutional_email]; $types = "sssss";
     if(!empty($_POST['password'])) { $query .= ", password=?"; $params[] = password_hash($_POST['password'], PASSWORD_DEFAULT); $types .= "s"; }
     if($profile_pic_path) { $query .= ", profile_pic=?"; $params[] = $profile_pic_path; $types .= "s"; }
     $query .= " WHERE id=?"; $params[] = $admin_id; $types .= "i";
@@ -143,6 +144,7 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
                         </div>
                         <div class="form-group"><label>Full Name</label><input type="text" name="full_name" value="<?php echo htmlspecialchars($admin['full_name']); ?>" required></div>
                         <div class="form-group"><label>Email</label><input type="email" name="email" value="<?php echo htmlspecialchars($admin['email']); ?>" required></div>
+                        <div class="form-group"><label>Institutional Email</label><input type="email" name="institutional_email" value="<?php echo htmlspecialchars($admin['institutional_email'] ?? ''); ?>" placeholder="example@deped.gov.ph"></div>
                         <div class="form-group"><label>Phone</label><input type="text" name="phone" value="<?php echo htmlspecialchars($admin['phone']); ?>"></div>
                         <div class="form-group"><label>New Password</label><input type="password" name="password" placeholder="Leave blank to keep current"></div>
                         <button type="submit" name="update_profile" class="update-btn">Save Changes</button>

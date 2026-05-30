@@ -30,15 +30,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_user'])) {
     // Kung Teacher siya, i-save ang assigned grade. Kung Admin, NULL ra.
     $assigned_grade = ($role === 'Teacher') ? $_POST['assigned_grade'] : NULL;
     $status = $_POST['status'];
+    $institutional_email = $_POST['institutional_email'] ?? '';
 
     // I-check kung nag-type ba ug bag-ong password ang admin
     if (!empty($_POST['password'])) {
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $stmt = $conn->prepare("UPDATE admins SET full_name = ?, role = ?, assigned_grade = ?, status = ?, password = ? WHERE id = ?");
-        $stmt->bind_param("sssssi", $full_name, $role, $assigned_grade, $status, $password, $id);
+        $stmt = $conn->prepare("UPDATE admins SET full_name = ?, role = ?, assigned_grade = ?, status = ?, institutional_email = ?, password = ? WHERE id = ?");
+        $stmt->bind_param("ssssssi", $full_name, $role, $assigned_grade, $status, $institutional_email, $password, $id);
     } else {
-        $stmt = $conn->prepare("UPDATE admins SET full_name = ?, role = ?, assigned_grade = ?, status = ? WHERE id = ?");
-        $stmt->bind_param("ssssi", $full_name, $role, $assigned_grade, $status, $id);
+        $stmt = $conn->prepare("UPDATE admins SET full_name = ?, role = ?, assigned_grade = ?, status = ?, institutional_email = ? WHERE id = ?");
+        $stmt->bind_param("sssssi", $full_name, $role, $assigned_grade, $status, $institutional_email, $id);
     }
     echo "<!DOCTYPE html><html><head><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script></head><body>";
     if ($stmt->execute()) {
@@ -57,9 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
     // Kung Teacher siya, i-save ang assigned grade. Kung Admin, NULL ra.
     $assigned_grade = ($role === 'Teacher') ? $_POST['assigned_grade'] : NULL;
     $status = 'Active';
+    $institutional_email = $_POST['institutional_email'] ?? '';
 
-    $stmt = $conn->prepare("INSERT INTO admins (full_name, username, password, role, assigned_grade, status) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $full_name, $username, $password, $role, $assigned_grade, $status);
+    $stmt = $conn->prepare("INSERT INTO admins (full_name, username, password, role, assigned_grade, status, institutional_email) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $full_name, $username, $password, $role, $assigned_grade, $status, $institutional_email);
     echo "<!DOCTYPE html><html><head><script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script></head><body>";
     if ($stmt->execute()) {
         echo "<script>Swal.fire({ icon: 'success', title: 'Account Created!', text: 'New user added successfully.', showConfirmButton: false, timer: 1500 }).then(() => { window.location.href='users.php'; });</script>";
@@ -183,6 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
         <h3 style="color: #1e3a8a; margin-top: 0;">Add New Account</h3>
         <form method="POST">
             <input type="text" name="full_name" placeholder="Full Name" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;" required>
+            <input type="email" name="institutional_email" placeholder="Institutional Email" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;">
             <input type="text" name="username" placeholder="Username" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;" required>
             <input type="password" name="password" placeholder="Password" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;" required>
             
@@ -219,6 +222,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
             
             <label style="font-size: 12px; color: #64748b; margin-bottom: 5px; display: block;">Full Name</label>
             <input type="text" name="full_name" id="edit_name" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;" required>
+            
+            <label style="font-size: 12px; color: #64748b; margin-bottom: 5px; display: block;">Institutional Email</label>
+            <input type="email" name="institutional_email" id="edit_inst_email" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;">
             
             <label style="font-size: 12px; color: #64748b; margin-bottom: 5px; display: block;">Account Role</label>
             <select name="role" id="edit_role" onchange="toggleEditGrade()" style="width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 1px solid #e2e8f0;">
@@ -279,6 +285,7 @@ function closeAddModal() {
 function openEditModal(user) {
     document.getElementById('edit_id').value = user.id;
     document.getElementById('edit_name').value = user.full_name;
+    document.getElementById('edit_inst_email').value = user.institutional_email ? user.institutional_email : '';
     document.getElementById('edit_role').value = user.role;
     
     // I-set ang grade kung naa
