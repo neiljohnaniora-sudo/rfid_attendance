@@ -3,6 +3,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// I-set ang saktong Timezone para tanang database records pareha og oras
+date_default_timezone_set('Asia/Manila');
+
 $servername = getenv('MYSQLHOST');
 $username   = getenv('MYSQLUSER');
 $password   = getenv('MYSQLPASSWORD');

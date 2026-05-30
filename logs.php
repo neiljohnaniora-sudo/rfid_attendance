@@ -154,8 +154,13 @@ $result = $conn->query($sql);
     </div>
 
     <script>
+        // Sync with Server Time
+        const serverTimeMs = <?php echo time() * 1000; ?>;
+        const localTimeMs = Date.now();
+        const timeDiff = serverTimeMs - localTimeMs;
+
         setInterval(() => {
-            let d = new Date();
+            let d = new Date(Date.now() + timeDiff);
             document.getElementById('liveClock').innerText = d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
         }, 1000);
 

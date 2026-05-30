@@ -131,13 +131,18 @@ if ($result && $result->num_rows > 0) {
         </div>
 
     <script>
-        // Clock Logic
+        // Clock Logic (Synchronized with Server Time)
+        const serverTimeMs = <?php echo time() * 1000; ?>;
+        const localTimeMs = Date.now();
+        const timeDiff = serverTimeMs - localTimeMs;
+
         function updateClock() {
-            const now = new Date();
+            const now = new Date(Date.now() + timeDiff);
             document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('live-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
-        setInterval(updateClock, 1000); updateClock();
+        setInterval(updateClock, 1000); 
+        updateClock();
 
         // ==========================================
         // 🟢 ESP32 LIVE SCAN LISTENER (AJAX POLLING)
