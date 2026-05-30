@@ -26,14 +26,21 @@
         
         body { 
             display: flex; justify-content: center; align-items: center; 
-            min-height: 100vh; background-color: #f1f5f9; 
+            min-height: 100vh; 
+            background: linear-gradient(-45deg, #1e3a8a, #3b82f6, #8b5cf6, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             overflow-x: hidden;
         }
 
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
         .container { 
-            background: #ffffff; 
+            background: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); 
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
             position: relative; 
             overflow: hidden; 
             width: 850px; 
@@ -67,31 +74,33 @@
 
         form { 
             display: flex; flex-direction: column; padding: 0 40px; height: 100%; 
-            justify-content: center; background-color: #ffffff;
+            justify-content: center; background-color: transparent;
         }
         
         .form-header { text-align: center; margin-bottom: 20px; }
-        h2 { color: #0f172a; font-size: 24px; font-weight: 700; }
+        h2 { color: #ffffff; font-size: 24px; font-weight: 700; }
         
-        .logo-text { font-size: 20px; font-weight: 800; color: #1e3a8a; margin-bottom: 15px; text-align: center; }
-        .logo-text span { color: #64748b; font-weight: 500; font-size: 10px; display: block; letter-spacing: 1px; }
+        .logo-text { font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 15px; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .logo-text span { color: #e2e8f0; font-weight: 500; font-size: 10px; display: block; letter-spacing: 1px; text-shadow: none; }
 
         /* --- Inputs --- */
         .input-group { margin-bottom: 10px; width: 100%; text-align: left; }
-        .input-group label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 4px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: #e2e8f0; margin-bottom: 4px; }
         
         input, select { 
-            background: #f8fafc; border: 1px solid #cbd5e1; color: #0f172a;
+            background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff;
             padding: 10px 12px; width: 100%; border-radius: 8px; outline: none; font-size: 13px; transition: 0.2s;
         }
-        input:focus, select:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); }
+        input:focus, select:focus { background: rgba(255, 255, 255, 0.2); border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3); }
+        select option { background: #1e3a8a; color: #ffffff; }
+        input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #1e40af inset !important; -webkit-text-fill-color: #ffffff !important; }
 
         button.btn-main { 
-            border-radius: 8px; border: none; background: #0f172a; 
+            border-radius: 8px; border: none; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
             color: #ffffff; padding: 12px; cursor: pointer; margin-top: 15px; font-weight: 600; 
             width: 100%; transition: 0.3s; font-size: 14px;
         }
-        button.btn-main:hover { background: #1e3a8a; transform: translateY(-1px); }
+        button.btn-main:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6); }
 
         /* --- Overlay Section --- */
         .overlay-container { 
@@ -101,7 +110,8 @@
         .container.right-panel-active .overlay-container { transform: translateX(-100%); }
         
         .overlay { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            background: rgba(15, 23, 42, 0.3);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             color: #ffffff; position: relative; left: -100%; height: 100%; width: 200%; 
             transform: translateX(0); transition: transform 0.6s ease-in-out; 
         }
@@ -119,16 +129,16 @@
         .container.right-panel-active .overlay-right { transform: translateX(20%); }
 
         .overlay h1 { font-size: 28px; font-weight: 800; margin-bottom: 15px; }
-        .overlay p { font-size: 14px; line-height: 1.6; color: #e2e8f0; margin-bottom: 25px; }
+        .overlay p { font-size: 14px; line-height: 1.6; color: #f8fafc; margin-bottom: 25px; }
 
         button.ghost { 
             background: transparent; border: 2px solid #ffffff; color: #ffffff;
             border-radius: 8px; padding: 10px 30px; font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-        button.ghost:hover { background: #ffffff; color: #0f172a; }
+        button.ghost:hover { background: #ffffff; color: #1e3a8a; }
 
         /* --- Mobile Responsive --- */
-        .mobile-switch { display: none; color: #1e3a8a; font-weight: 600; margin-top: 15px; cursor: pointer; text-align: center; font-size: 13px; }
+        .mobile-switch { display: none; color: #93c5fd; font-weight: 600; margin-top: 15px; cursor: pointer; text-align: center; font-size: 13px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         
         @media (max-width: 768px) {
             .container { min-height: 700px; width: 95%; }
@@ -207,16 +217,20 @@
                     <input type="text" name="full_name" required />
                 </div>
                 <div class="input-group">
+                    <label>Institutional Email (Optional)</label>
+                    <input type="email" name="institutional_email" />
+                </div>
+                <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" name="email" placeholder="example@email.com" required />
+                    <input type="email" name="email" required />
                 </div>
                 <div class="input-group">
                     <label>Phone Number</label>
-                    <input type="text" name="phone" placeholder="09xxxxxxxxx" required />
+                    <input type="text" name="phone" required />
                 </div>
                 <div class="input-group">
                     <label>Home Address</label>
-                    <input type="text" name="address" placeholder="City, Province" required />
+                    <input type="text" name="address" required />
                 </div>
                 <div class="input-group">
                     <label>Assign Grade Level</label>
@@ -232,7 +246,7 @@
                 </div>
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" name="password" placeholder="••••••••" required />
+                    <input type="password" name="password" required />
                 </div>
 
                 <button type="submit" class="btn-main">Register Now</button>
@@ -249,15 +263,11 @@
                 
                 <div class="input-group">
                     <label>Email Address</label>
-                    <input type="email" name="email" placeholder="example@email.com" required />
-                </div>
-                <div class="input-group">
-                    <label>Institutional Email</label>
-                    <input type="email" name="institutional_email" placeholder="example@deped.gov.ph" />
+                    <input type="email" name="email" required />
                 </div>
                 <div class="input-group">
                     <label>Password</label>
-                    <input type="password" name="password" placeholder="••••••••" required />
+                    <input type="password" name="password" required />
                 </div>
                 
                 <button type="submit" class="btn-main">Sign In</button>

@@ -144,7 +144,7 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
                         </div>
                         <div class="form-group"><label>Full Name</label><input type="text" name="full_name" value="<?php echo htmlspecialchars($admin['full_name']); ?>" required></div>
                         <div class="form-group"><label>Email</label><input type="email" name="email" value="<?php echo htmlspecialchars($admin['email']); ?>" required></div>
-                        <div class="form-group"><label>Institutional Email</label><input type="email" name="institutional_email" value="<?php echo htmlspecialchars($admin['institutional_email'] ?? ''); ?>" placeholder="example@deped.gov.ph"></div>
+                        <div class="form-group"><label>Institutional Email</label><input type="email" name="institutional_email" value="<?php echo htmlspecialchars($admin['institutional_email'] ?? ''); ?>"></div>
                         <div class="form-group"><label>Phone</label><input type="text" name="phone" value="<?php echo htmlspecialchars($admin['phone']); ?>"></div>
                         <div class="form-group"><label>New Password</label><input type="password" name="password" placeholder="Leave blank to keep current"></div>
                         <button type="submit" name="update_profile" class="update-btn">Save Changes</button>

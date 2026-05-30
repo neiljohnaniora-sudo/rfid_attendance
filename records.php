@@ -231,15 +231,15 @@ if ($result && $result->num_rows > 0) {
                 <input type="hidden" name="add_student" value="1"> 
                 <div class="form-group">
                     <label>RFID Number</label>
-                    <input type="text" name="rfid" placeholder="Scan or type RFID..." required autofocus>
+                    <input type="text" name="rfid" placeholder="Tap ID or type RFID no." required autofocus>
                 </div>
                 <div class="form-group">
                     <label>Guardian Email</label>
-                    <input type="email" name="guardian_email" placeholder="parent@email.com">
+                    <input type="email" name="guardian_email">
                 </div>
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" name="name" placeholder="Juan Dela Cruz" required>
+                    <input type="text" name="name" required>
                 </div>
                 <div class="form-group">
                     <label>Grade Level</label>
@@ -283,11 +283,11 @@ if ($result && $result->num_rows > 0) {
                 </div>
                 <div class="form-group">
                     <label>Guardian Email</label>
-                    <input type="email" name="guardian_email" id="tapStudentGuardianEmail" placeholder="parent@email.com">
+                    <input type="email" name="guardian_email" id="tapStudentGuardianEmail">
                 </div>
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" name="name" placeholder="Juan Dela Cruz" required autofocus>
+                    <input type="text" name="name" required autofocus>
                 </div>
                 <div class="form-group">
                     <label>Grade Level</label>
@@ -329,7 +329,7 @@ if ($result && $result->num_rows > 0) {
                 </div>
                 <div class="form-group">
                     <label>Guardian Email</label>
-                    <input type="email" name="guardian_email" id="editStudentGuardianEmail" placeholder="parent@email.com">
+                    <input type="email" name="guardian_email" id="editStudentGuardianEmail">
                 </div>
                 <div class="form-group">
                     <label>Grade Level</label>
