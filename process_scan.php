@@ -13,6 +13,10 @@ if (isset($_POST['rfid'])) {
         $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
     }
 
+    $action = "";
+    $status_msg = "";
+    $student_name = "Unknown";
+
     // Pangitaon ang student gamit ang RFID
     $student_query = $conn->query("SELECT * FROM students WHERE rfid = '$rfid' AND status = 'Active'");
     
@@ -35,9 +39,15 @@ if (isset($_POST['rfid'])) {
                 }
 
                 $conn->query("UPDATE attendance_logs SET time_out = '$current_time' WHERE id = " . $log['id']);
+                
+                $action = "TIME OUT";
+                file_put_contents('latest_scan.json', json_encode(['timestamp'=>time(),'rfid'=>$rfid,'name'=>$student_name,'action'=>$action,'status'=>"Success"]));
+                
                 echo json_encode(['success' => true, 'message' => "Time Out Success:<br>$student_name"]);
                 exit();
             } else {
+                $action = "DONE";
+                file_put_contents('latest_scan.json', json_encode(['timestamp'=>time(),'rfid'=>$rfid,'name'=>$student_name,'action'=>$action,'status'=>"Already Out"]));
                 echo json_encode(['success' => false, 'message' => "$student_name<br>already logged out!"]);
                 exit();
             }
@@ -48,10 +58,16 @@ if (isset($_POST['rfid'])) {
             
             $conn->query("INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 
                           VALUES ('$today', '$rfid', '$student_name', '$current_time', '$status')");
+            
+            $action = "TIME IN";
+            file_put_contents('latest_scan.json', json_encode(['timestamp'=>time(),'rfid'=>$rfid,'name'=>$student_name,'action'=>$action,'status'=>$status]));
+            
             echo json_encode(['success' => true, 'message' => "Time In Success:<br>$student_name"]);
             exit();
         }
     } else {
+        $action = "REGISTER";
+        file_put_contents('latest_scan.json', json_encode(['timestamp'=>time(),'rfid'=>$rfid,'name'=>"Unknown",'action'=>$action,'status'=>"Pending"]));
         echo json_encode(['success' => false, 'message' => "Unregistered RFID!"]);
         exit();
     }
