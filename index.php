@@ -27,17 +27,27 @@
         body { 
             display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; 
-            background: linear-gradient(-45deg, #1e3a8a, #3b82f6, #8b5cf6, #0f172a);
+            background: linear-gradient(-45deg, #0f172a, #1e3a8a, #3b82f6, #0f172a);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             overflow-x: hidden;
+            padding: 40px 20px;
         }
 
+        /* --- Premium Glass Background Orbs (Bongga Effect) --- */
+        body::before, body::after {
+            content: ''; position: fixed; border-radius: 50%; filter: blur(120px); z-index: -1;
+            animation: floatOrb 10s infinite alternate ease-in-out;
+        }
+        body::before { width: 400px; height: 400px; background: #8b5cf6; top: -10%; left: -10%; }
+        body::after { width: 450px; height: 450px; background: #2563eb; bottom: -10%; right: -10%; animation-delay: -5s; }
+
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(80px, 80px) scale(1.2); } }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
         .container { 
-            background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.08); 
+            backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
@@ -45,7 +55,7 @@
             overflow: hidden; 
             width: 850px; 
             max-width: 100%; 
-            min-height: 650px; 
+            min-height: 750px; 
         }
 
         /* --- Form Containers --- */
@@ -84,7 +94,7 @@
         .logo-text span { color: #e2e8f0; font-weight: 500; font-size: 10px; display: block; letter-spacing: 1px; text-shadow: none; }
 
         /* --- Inputs --- */
-        .input-group { margin-bottom: 10px; width: 100%; text-align: left; }
+        .input-group { margin-bottom: 12px; width: 100%; text-align: left; }
         .input-group label { display: block; font-size: 12px; font-weight: 600; color: #e2e8f0; margin-bottom: 4px; }
         
         input, select { 
@@ -141,7 +151,7 @@
         .mobile-switch { display: none; color: #93c5fd; font-weight: 600; margin-top: 15px; cursor: pointer; text-align: center; font-size: 13px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         
         @media (max-width: 768px) {
-            .container { min-height: 700px; width: 95%; }
+            .container { min-height: 820px; width: 100%; }
             .overlay-container { display: none; }
             .form-container { width: 100%; }
             .sign-in-container { width: 100%; }
