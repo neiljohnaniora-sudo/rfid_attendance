@@ -34,6 +34,8 @@ if (isset($_POST['rfid'])) {
             if (empty($log['time_out']) || $log['time_out'] == '00:00:00') {
                 
                 if (strtotime($current_time) < strtotime($time_settings['timeout_start'] . ':00')) {
+                    $action = "ERROR";
+                    file_put_contents('latest_scan.json', json_encode(['timestamp'=>time(),'rfid'=>$rfid,'name'=>$student_name,'action'=>$action,'status'=>"Too Early"]));
                     echo json_encode(['success' => false, 'message' => "Too Early to Time Out!<br>Wait until " . date("h:i A", strtotime($time_settings['timeout_start']))]);
                     exit();
                 }

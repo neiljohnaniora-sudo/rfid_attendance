@@ -408,7 +408,17 @@ if ($result && $result->num_rows > 0) {
             document.getElementById('tapRfidInput').value = '';
             
             isFirstTapLoad = true;
-            tapPolling = setInterval(checkLiveScanForRegistration, 1500);
+            
+            // I-fetch daan ang pinaka-latest nga timestamp pag-abli sa modal aron dili ma-ignore ang first tap
+            fetch('check_live_scan.php?t=' + Date.now())
+            .then(r => r.json())
+            .then(data => {
+                lastTapTimestamp = data.timestamp;
+                isFirstTapLoad = false;
+            });
+
+            // Gipaspasan nato ang polling gikan sa 1500ms ngadto sa 800ms
+            tapPolling = setInterval(checkLiveScanForRegistration, 800);
         }
 
         function closeTapModal() { 
@@ -417,15 +427,12 @@ if ($result && $result->num_rows > 0) {
         }
 
         function checkLiveScanForRegistration() {
+            if (isFirstTapLoad) return; // Maghulat sa initial fetch
+            
             fetch('check_live_scan.php?t=' + Date.now())
             .then(r => r.json())
             .then(data => {
                 if(data.timestamp && data.timestamp !== lastTapTimestamp) {
-                    if (isFirstTapLoad) {
-                        lastTapTimestamp = data.timestamp;
-                        isFirstTapLoad = false;
-                        return; 
-                    }
                     
                     lastTapTimestamp = data.timestamp;
                     
