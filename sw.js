@@ -1,4 +1,4 @@
-const cacheName = 'attendance-v3'; // Gi-update ngadto sa v3 aron ma-load ang bag-ong loading screen
+const cacheName = 'attendance-v4'; // Gi-update ngadto sa v4 aron mo-gana ang Auto-Update
 // Gamay lang sa ang assets para dili mag-error sa install
 const assets = [
   './',
@@ -36,11 +36,17 @@ self.addEventListener('activate', evt => {
 
 // Fetch events (Kritikal ni para sa "Install App" sa CP)
 self.addEventListener('fetch', evt => {
+  // KINI ANG BAG-O: NETWORK FIRST STRATEGY (Para mo-update automatic)
   evt.respondWith(
-    caches.match(evt.request).then(cacheRes => {
-      return cacheRes || fetch(evt.request).catch(() => {
-        // Pwede nimo butangan og offline page diri puhon
+    fetch(evt.request).then(fetchRes => {
+      return caches.open(cacheName).then(cache => {
+        // I-save ang latest nga updates sa cache aron ready inig offline
+        cache.put(evt.request.url, fetchRes.clone());
+        return fetchRes;
       });
+    }).catch(() => {
+      // Kung walay internet, anha pa siya mokuha sa karaan nga cache
+      return caches.match(evt.request);
     })
   );
 });

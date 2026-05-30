@@ -173,13 +173,6 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
                         <button type="submit" name="update_time_settings" class="update-btn" style="background: #10b981;">Save Time Settings</button>
                     </form>
                 </div>
-
-                <div class="card">
-                    <h3 class="section-title"><i class="fa-solid fa-school"></i> Institution Info</h3>
-                    <div class="form-group"><label>School Name</label><input type="text" value="Zamboanga National High School" readonly></div>
-                    <div class="form-group"><label>Status</label><input type="text" value="<?php echo $admin['status']; ?>" readonly></div>
-                    <div class="form-group"><label>Role</label><input type="text" value="<?php echo $admin_role; ?>" readonly></div>
-                </div>
             </div>
 
             <?php if ($admin_role === 'Admin' && $pending_result): ?>
