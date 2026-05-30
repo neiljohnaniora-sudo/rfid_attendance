@@ -23,7 +23,8 @@ function sendEmailNotification($to_email, $subject, $message) {
     $query = http_build_query([
         'to' => $to_email,
         'subject' => $subject,
-        'body' => $message
+        'body' => $message,
+        'name' => 'Smart Attendance'
     ]);
     
     $full_url = $google_script_url . "?" . $query;
