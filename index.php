@@ -27,7 +27,7 @@
         body { 
             display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; 
-            background: linear-gradient(-45deg, #0f172a, #1e3a8a, #3b82f6, #0f172a);
+            background: linear-gradient(-45deg, #020617, #0f172a, #1e3a8a, #020617);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
             overflow-x: hidden;
@@ -39,8 +39,8 @@
             content: ''; position: fixed; border-radius: 50%; filter: blur(120px); z-index: -1;
             animation: floatOrb 10s infinite alternate ease-in-out;
         }
-        body::before { width: 400px; height: 400px; background: #8b5cf6; top: -10%; left: -10%; }
-        body::after { width: 450px; height: 450px; background: #2563eb; bottom: -10%; right: -10%; animation-delay: -5s; }
+        body::before { width: 400px; height: 400px; background: #1d4ed8; top: -10%; left: -10%; }
+        body::after { width: 450px; height: 450px; background: #312e81; bottom: -10%; right: -10%; animation-delay: -5s; }
 
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(80px, 80px) scale(1.2); } }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
@@ -53,9 +53,9 @@
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
             position: relative; 
             overflow: hidden; 
-            width: 850px; 
+            width: 768px; 
             max-width: 100%; 
-            min-height: 750px; 
+            min-height: 540px; 
         }
 
         /* --- Form Containers --- */
@@ -67,13 +67,14 @@
         }
         
         .sign-in-container { left: 0; width: 50%; z-index: 2; }
-        .container.right-panel-active .sign-in-container { transform: translateX(100%); }
+        .container.right-panel-active .sign-in-container { transform: translateX(100%); opacity: 0; pointer-events: none; }
         
-        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; }
+        .sign-up-container { left: 0; width: 50%; opacity: 0; z-index: 1; pointer-events: none; }
         .container.right-panel-active .sign-up-container { 
             transform: translateX(100%); 
             opacity: 1; 
             z-index: 5; 
+            pointer-events: auto;
             animation: show 0.6s; 
         }
 
@@ -94,12 +95,15 @@
         .logo-text span { color: #e2e8f0; font-weight: 500; font-size: 10px; display: block; letter-spacing: 1px; text-shadow: none; }
 
         /* --- Inputs --- */
-        .input-group { margin-bottom: 12px; width: 100%; text-align: left; }
-        .input-group label { display: block; font-size: 12px; font-weight: 600; color: #e2e8f0; margin-bottom: 4px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; width: 100%; }
+        .form-grid .full-width { grid-column: span 2; }
+
+        .input-group { margin-bottom: 10px; width: 100%; text-align: left; }
+        .input-group label { display: block; font-size: 11px; font-weight: 600; color: #e2e8f0; margin-bottom: 3px; }
         
         input, select { 
             background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff;
-            padding: 10px 12px; width: 100%; border-radius: 8px; outline: none; font-size: 13px; transition: 0.2s;
+            padding: 8px 12px; width: 100%; border-radius: 8px; outline: none; font-size: 12px; transition: 0.2s;
         }
         input:focus, select:focus { background: rgba(255, 255, 255, 0.2); border-color: #60a5fa; box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.3); }
         select option { background: #1e3a8a; color: #ffffff; }
@@ -107,7 +111,7 @@
 
         button.btn-main { 
             border-radius: 8px; border: none; background: #3b82f6; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            color: #ffffff; padding: 12px; cursor: pointer; margin-top: 15px; font-weight: 600; 
+            color: #ffffff; padding: 10px; cursor: pointer; margin-top: 10px; font-weight: 600; 
             width: 100%; transition: 0.3s; font-size: 14px;
         }
         button.btn-main:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6); }
@@ -151,8 +155,10 @@
         .mobile-switch { display: none; color: #93c5fd; font-weight: 600; margin-top: 15px; cursor: pointer; text-align: center; font-size: 13px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         
         @media (max-width: 768px) {
-            .container { min-height: 820px; width: 100%; }
+            .container { min-height: 680px; width: 100%; }
             .overlay-container { display: none; }
+            .form-grid { grid-template-columns: 1fr; gap: 0; }
+            .form-grid .full-width { grid-column: span 1; }
             .form-container { width: 100%; }
             .sign-in-container { width: 100%; }
             .sign-up-container { width: 100%; }
@@ -218,45 +224,47 @@
         
         <div class="form-container sign-up-container">
             <form action="register.php" method="POST" autocomplete="off">
-                <div class="form-header">
+                <div class="form-header" style="margin-bottom: 10px;">
                     <h2>Create Account</h2>
                 </div>
                 
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" name="full_name" required />
-                </div>
-                <div class="input-group">
-                    <label>Institutional Email (Optional)</label>
-                    <input type="email" name="institutional_email" />
-                </div>
-                <div class="input-group">
-                    <label>Email Address</label>
-                    <input type="email" name="email" required />
-                </div>
-                <div class="input-group">
-                    <label>Phone Number</label>
-                    <input type="text" name="phone" required />
-                </div>
-                <div class="input-group">
-                    <label>Home Address</label>
-                    <input type="text" name="address" required />
-                </div>
-                <div class="input-group">
-                    <label>Assign Grade Level</label>
-                    <select name="assigned_grade" required>
-                        <option value="" disabled selected>Select Grade Level</option>
-                        <option value="Grade 1">Grade 1 Teacher</option>
-                        <option value="Grade 2">Grade 2 Teacher</option>
-                        <option value="Grade 3">Grade 3 Teacher</option>
-                        <option value="Grade 4">Grade 4 Teacher</option>
-                        <option value="Grade 5">Grade 5 Teacher</option>
-                        <option value="Grade 6">Grade 6 Teacher</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" name="password" required />
+                <div class="form-grid">
+                    <div class="input-group full-width">
+                        <label>Full Name</label>
+                        <input type="text" name="full_name" required />
+                    </div>
+                    <div class="input-group">
+                        <label>Inst. Email (Optional)</label>
+                        <input type="email" name="institutional_email" />
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" required />
+                    </div>
+                    <div class="input-group">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" required />
+                    </div>
+                    <div class="input-group">
+                        <label>Home Address</label>
+                        <input type="text" name="address" required />
+                    </div>
+                    <div class="input-group">
+                        <label>Assign Grade</label>
+                        <select name="assigned_grade" required>
+                            <option value="" disabled selected>Select Grade</option>
+                            <option value="Grade 1">Grade 1</option>
+                            <option value="Grade 2">Grade 2</option>
+                            <option value="Grade 3">Grade 3</option>
+                            <option value="Grade 4">Grade 4</option>
+                            <option value="Grade 5">Grade 5</option>
+                            <option value="Grade 6">Grade 6</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" name="password" required />
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-main">Register Now</button>
