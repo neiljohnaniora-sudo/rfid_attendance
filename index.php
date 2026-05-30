@@ -144,9 +144,55 @@
             .container.right-panel-active .sign-in-container { z-index: 1; pointer-events: none; }
             .container.right-panel-active .sign-up-container { pointer-events: auto; }
         }
+
+        /* --- Loading Screen Styles --- */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader-content { text-align: center; color: #ffffff; padding: 20px; }
+
+        .loader-logo { font-size: 28px; font-weight: 800; letter-spacing: 2px; margin-bottom: 25px; animation: pulse 1.5s infinite alternate; }
+        .loader-logo span { display: block; font-size: 12px; font-weight: 500; color: #94a3b8; letter-spacing: 4px; margin-top: 8px; }
+
+        .spinner {
+            width: 50px; height: 50px; border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top: 4px solid #3b82f6; border-radius: 50%; margin: 0 auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; } }
+
+        body.loading { overflow: hidden; }
+
+        @media (max-width: 480px) {
+            .loader-logo { font-size: 22px; }
+            .loader-logo span { font-size: 10px; letter-spacing: 2px; }
+            .spinner { width: 40px; height: 40px; }
+        }
     </style>
 </head>
-<body>
+<body class="loading">
+
+    <!-- Loading Screen Overlay -->
+    <div id="loading-screen">
+        <div class="loader-content">
+            <div class="loader-logo">ATTENDANCE<span>RFID MANAGEMENT SYSTEM</span></div>
+            <div class="spinner"></div>
+        </div>
+    </div>
 
     <div class="container" id="container">
         
@@ -244,6 +290,17 @@
         // Mobile Support
         signUpMobile.addEventListener('click', () => container.classList.add("right-panel-active"));
         signInMobile.addEventListener('click', () => container.classList.remove("right-panel-active"));
+
+        // Loading Screen Logic
+        window.addEventListener('load', function() {
+            // Set delay (e.g., 1.5 seconds) aron makita sa user ang loading animation
+            setTimeout(function() {
+                const loader = document.getElementById('loading-screen');
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+                document.body.classList.remove('loading');
+            }, 1500);
+        });
     </script>
 
     <?php include 'chat_widget.php'; ?>
