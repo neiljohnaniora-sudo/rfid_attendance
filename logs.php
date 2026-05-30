@@ -53,8 +53,8 @@ $result = $conn->query($sql);
     <style>
         /* Limpyo nga styles para sa table */
         .logs-card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
-        .table-container { overflow-x: auto; margin-top: 20px; display: flex; flex-direction: column; min-height: 650px; }
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 700px; }
+        .table-container { margin-top: 20px; display: flex; flex-direction: column; min-height: 650px; }
+        table { width: 100%; border-collapse: collapse; }
         th { background: #f8fafc; color: #64748b; font-size: 12px; text-transform: uppercase; padding: 15px; text-align: left; border-bottom: 2px solid #f1f5f9; }
         td { padding: 15px; border-bottom: 1px solid #f1f5f9; color: #1e293b; font-size: 14px; }
         td:nth-child(2) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -79,6 +79,16 @@ $result = $conn->query($sql);
             .btn-filter { width: 100%; }
             .logs-header { flex-direction: column; align-items: flex-start !important; gap: 10px; }
             .logs-header > div { text-align: left !important; }
+            
+            /* Responsive Card View */
+            .logs-card { padding: 15px; background: transparent; border: none; box-shadow: none; }
+            .table-container { min-height: auto; overflow: visible; margin-top: 10px; border: none; }
+            table { border: none; }
+            thead { display: none; }
+            tr { display: block; background: #fff; margin-bottom: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; padding: 10px; }
+            td { display: flex; justify-content: space-between; align-items: center; padding: 12px 10px; border-bottom: 1px solid #f1f5f9; }
+            td:last-child { border-bottom: none; }
+            td::before { content: attr(data-label); font-weight: 700; color: #64748b; font-size: 11px; text-transform: uppercase; }
         }
     </style>
 </head>
@@ -129,12 +139,12 @@ $result = $conn->query($sql);
                             $b_class = ($row['status'] == 'On-Time') ? 'bg-success' : 'bg-warning';
                         ?>
                             <tr>
-                                <td><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
-                                <td><strong><?php echo htmlspecialchars($row['student_name']); ?></strong></td>
-                                <td><?php echo htmlspecialchars($row['grade'] ?? 'N/A'); ?></td>
-                                <td><?php echo date('h:i A', strtotime($row['time_in'])); ?></td>
-                                <td><?php echo $row['time_out'] ? date('h:i A', strtotime($row['time_out'])) : '--'; ?></td>
-                                <td><span class="badge <?php echo $b_class; ?>"><?php echo $row['status']; ?></span></td>
+                                <td data-label="Date"><?php echo date('M d, Y', strtotime($row['date'])); ?></td>
+                                <td data-label="Student Name"><strong><?php echo htmlspecialchars($row['student_name']); ?></strong></td>
+                                <td data-label="Grade"><?php echo htmlspecialchars($row['grade'] ?? 'N/A'); ?></td>
+                                <td data-label="Time In"><?php echo date('h:i A', strtotime($row['time_in'])); ?></td>
+                                <td data-label="Time Out"><?php echo $row['time_out'] ? date('h:i A', strtotime($row['time_out'])) : '--'; ?></td>
+                                <td data-label="Status"><span class="badge <?php echo $b_class; ?>"><?php echo $row['status']; ?></span></td>
                             </tr>
                         <?php endwhile; else: ?>
                             <tr><td colspan="6" style="text-align:center; padding: 30px; color: #94a3b8;">No records found.</td></tr>

@@ -100,12 +100,12 @@ if ($result && $result->num_rows > 0) {
         .btn-success { background-color: #10b981; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         
         .grades-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 25px; align-items: stretch; }
-        .table-container { display: flex; flex-direction: column; background: #fff; border-radius: 15px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 5px solid #3b82f6; border: 1px solid #f1f5f9; overflow-x: auto; }
+        .table-container { display: flex; flex-direction: column; background: #fff; border-radius: 15px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-top: 5px solid #3b82f6; border: 1px solid #f1f5f9; }
         .table-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .table-header h2 { font-size: 18px; color: #1e293b; margin: 0; display: flex; align-items: center; gap: 10px; }
         .control-input { padding: 10px 15px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; width: 200px; font-size: 14px; background: #f8fafc; }
         
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 600px; }
+        table { width: 100%; border-collapse: collapse; }
         th, td { padding: 14px 12px; text-align: left; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
         th { color: #64748b; font-size: 12px; text-transform: uppercase; background: #f8fafc; font-weight: 700; letter-spacing: 0.5px; }
         .badge-active { background: #dcfce7; color: #166534; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; }
@@ -148,6 +148,15 @@ if ($result && $result->num_rows > 0) {
             .top-header { flex-direction: column; align-items: flex-start !important; gap: 15px; }
             .table-header { flex-direction: column; align-items: flex-start; gap: 10px; }
             .control-input { width: 100%; }
+
+            .table-container { padding: 15px; background: transparent; border: none; box-shadow: none; border-top: none; overflow: visible; }
+            .table-header h2 { color: #3b82f6; font-size: 20px; border-bottom: 2px solid #3b82f6; padding-bottom: 5px; width: 100%; }
+            table { border: none; }
+            thead { display: none; }
+            tr { display: block; background: #fff; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; padding: 10px; }
+            td { display: flex; justify-content: space-between; align-items: center; padding: 10px !important; border-bottom: 1px solid #f1f5f9; text-align: right; }
+            td:last-child { border-bottom: none; justify-content: flex-end; gap: 15px; }
+            td::before { content: attr(data-label); font-weight: 700; color: #64748b; font-size: 11px; text-transform: uppercase; margin-right: 15px; text-align: left; }
         }
     </style>
 </head>
@@ -191,10 +200,10 @@ if ($result && $result->num_rows > 0) {
                                     $badge_class = ($row['status'] == 'Active') ? 'badge-active' : 'badge-inactive';
                             ?>
                                 <tr>
-                                    <td style="font-family: monospace; color: #64748b;"><?php echo htmlspecialchars($row['rfid']); ?></td>
-                                    <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><strong style="color: #1e293b;"><?php echo htmlspecialchars($row['name']); ?></strong></td>
-                                    <td style="text-align: center;"><span class="<?php echo $badge_class; ?>"><?php echo htmlspecialchars($row['status']); ?></span></td>
-                                    <td style="text-align: center;">
+                                    <td data-label="RFID No." style="font-family: monospace; color: #64748b;"><?php echo htmlspecialchars($row['rfid']); ?></td>
+                                    <td data-label="Student Name"><strong style="color: #1e293b;"><?php echo htmlspecialchars($row['name']); ?></strong></td>
+                                    <td data-label="Status" style="text-align: center;"><span class="<?php echo $badge_class; ?>"><?php echo htmlspecialchars($row['status']); ?></span></td>
+                                    <td data-label="Action" style="text-align: center;">
                                         <button class="btn-edit" onclick="openEditStudentModal(<?php echo htmlspecialchars(json_encode($row), ENT_QUOTES, 'UTF-8'); ?>)" title="Edit">
                                             <i class="fa-solid fa-pen"></i>
                                         </button>

@@ -104,9 +104,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
             width: 100%;
             justify-content: center;
         }
+        /* --- Responsive Table to Cards for Mobile --- */
         .table-container {
-            overflow-x: auto;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            overflow: visible !important;
         }
+        table { border: none; }
+        thead { display: none; }
+        tr {
+            display: block;
+            background: #fff;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+        }
+        td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 10px !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+        }
+        td:last-child {
+            border-bottom: none !important;
+            justify-content: center;
+            gap: 20px;
+        }
+        td::before {
+            content: attr(data-label);
+            font-weight: 700;
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+        td:first-child::before { display: none; }
+        td:last-child::before { display: none; }
+
         .modal-box {
             width: 90% !important;
             margin: 20% auto !important;
@@ -129,8 +166,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
         </button>
     </div>
 
-    <div class="table-container" style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow-x: auto; border: 1px solid #e2e8f0;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 850px;">
+    <div class="table-container" style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
             <thead style="background: #f8fafc; color: #64748b; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; border-bottom: 2px solid #f1f5f9; white-space: nowrap;">
                 <tr>
                     <th style="padding: 20px;">Name & ID</th>
@@ -148,28 +185,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['save_user'])) {
                     $p_pic = (!empty($row['profile_pic'])) ? $row['profile_pic'] : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
                 ?>
                 <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s;" onmouseover="this.style.backgroundColor='#f8fafc'" onmouseout="this.style.backgroundColor='transparent'">
-                    <td style="padding: 15px 20px; display: flex; align-items: center; gap: 15px;">
+                    <td data-label="Name & ID" style="padding: 15px 20px; display: flex; align-items: center; gap: 15px; border-bottom: none !important;">
                         <img src="<?php echo $p_pic; ?>" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         <div>
                             <div style="font-weight: 700; color: #1e3a8a;"><?php echo htmlspecialchars($row['full_name']); ?></div>
                             <div style="font-size: 11px; color: #94a3b8;">ID: #<?php echo str_pad($row['id'], 3, '0', STR_PAD_LEFT); ?></div>
                         </div>
                     </td>
-                    <td style="padding: 15px 20px; color: #64748b; font-family: 'Courier New', monospace;"><?php echo htmlspecialchars($row['username'] ?? '---'); ?></td>
-                    <td style="padding: 15px 20px;">
+                    <td data-label="Username" style="padding: 15px 20px; color: #64748b; font-family: 'Courier New', monospace;"><?php echo htmlspecialchars($row['username'] ?? '---'); ?></td>
+                    <td data-label="Account Role" style="padding: 15px 20px;">
                         <span style="background: #eff6ff; color: #2563eb; padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 12px;"><?php echo $row['role']; ?></span>
                     </td>
-                    <td style="padding: 15px 20px; color: #64748b; font-weight: 600;">
+                    <td data-label="Assigned Grade" style="padding: 15px 20px; color: #64748b; font-weight: 600;">
                         <?php echo !empty($row['assigned_grade']) ? $row['assigned_grade'] : 'N/A'; ?>
                     </td>
-                    <td style="padding: 15px 20px;">
+                    <td data-label="Status" style="padding: 15px 20px;">
                         <?php if ($row['status'] === 'Active' || $row['status'] === 'Approved'): ?>
                             <span style="background: #dcfce7; color: #166534; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">Active</span>
                         <?php else: ?>
                             <span style="background: #fffbeb; color: #92400e; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">Pending</span>
                         <?php endif; ?>
                     </td>
-                    <td style="padding: 15px 20px; text-align: center;">
+                    <td data-label="Actions" style="padding: 15px 20px; text-align: center;">
                         <button onclick='openEditModal(<?php echo json_encode($row); ?>)' style="color: #3b82f6; background: none; border: none; cursor: pointer; margin-right: 15px; font-size: 16px;"><i class="fa-solid fa-pen"></i></button>
                         <button onclick="confirmDelete(<?php echo $row['id']; ?>)" style="color: #ef4444; background: none; border: none; cursor: pointer; font-size: 16px;"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
