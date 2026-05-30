@@ -31,7 +31,7 @@
         position: fixed;
         bottom: 90px; /* Gipataas gamay para di matabonan ang button */
         right: 20px;
-        width: 320px;
+        width: 290px;
         max-width: 90vw;
         background: white;
         border: 1px solid #ccc;
@@ -50,14 +50,18 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        cursor: grab;
+        user-select: none;
     }
+    .chat-header:active { cursor: grabbing; }
     .close-chat { cursor: pointer; font-size: 18px; }
     .close-chat:hover { color: #ffcccc; }
     #chatbox {
-        height: 250px;
+        height: 220px;
         overflow-y: scroll;
         padding: 10px;
         background: #f9f9f9;
+        font-size: 13px;
     }
     .user-msg { text-align: right; color: #fff; background: #007bff; padding: 5px 10px; border-radius: 10px; margin-bottom: 5px; display: inline-block; float: right; clear: both;}
     .bot-msg { text-align: left; color: #000; background: #e2e2e2; padding: 5px 10px; border-radius: 10px; margin-bottom: 5px; display: inline-block; float: left; clear: both;}
@@ -84,11 +88,11 @@
     }
     .chat-input-area {
         display: flex;
-        padding: 10px;
+        padding: 8px;
         border-top: 1px solid #eee;
         background: #fff;
     }
-    #data { flex: 1; padding: 5px; border: 1px solid #ccc; border-radius: 3px; }
+    #data { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 5px; outline: none; font-size: 13px; }
     #send-btn { background: #007bff; color: white; border: none; padding: 5px 10px; margin-left: 5px; cursor: pointer; border-radius: 3px; }
 </style>
 
@@ -119,6 +123,60 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
+    // --- DRAGGABLE CHATBOX LOGIC ---
+    const chatContainer = document.getElementById("chat-container");
+    const chatHeader = document.querySelector(".chat-header");
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    function startDrag(e) {
+        if(e.target.closest('.close-chat')) return; // Dili i-drag kung ang X button gi click
+        isDragging = true;
+        let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+        
+        offsetX = clientX - chatContainer.getBoundingClientRect().left;
+        offsetY = clientY - chatContainer.getBoundingClientRect().top;
+    }
+
+    function doDrag(e) {
+        if (!isDragging) return;
+        e.preventDefault(); // Prevent page scrolling during drag on mobile
+        
+        let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+        let newX = clientX - offsetX;
+        let newY = clientY - offsetY;
+
+        // Screen Boundaries (Aron dili molabay sa gawas sa screen)
+        if (newX < 0) newX = 0;
+        if (newY < 0) newY = 0;
+        if (newX + chatContainer.offsetWidth > window.innerWidth) newX = window.innerWidth - chatContainer.offsetWidth;
+        if (newY + chatContainer.offsetHeight > window.innerHeight) newY = window.innerHeight - chatContainer.offsetHeight;
+
+        chatContainer.style.left = `${newX}px`;
+        chatContainer.style.top = `${newY}px`;
+        chatContainer.style.bottom = 'auto'; // Tangtangon ang default positioning
+        chatContainer.style.right = 'auto';
+    }
+
+    function stopDrag() {
+        isDragging = false;
+    }
+
+    // Desktop Events
+    chatHeader.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', doDrag);
+    document.addEventListener('mouseup', stopDrag);
+
+    // Mobile / Touch Events
+    chatHeader.addEventListener('touchstart', startDrag, {passive: false});
+    document.addEventListener('touchmove', doDrag, {passive: false});
+    document.addEventListener('touchend', stopDrag);
+
+
+    // --- CHAT LOGIC ---
     $(document).ready(function(){
         // Toggle chatbox kung i-click ang floating button
         $("#chat-toggle-btn").click(function(){
