@@ -1,7 +1,7 @@
 {
   "name": "Attendance Monitoring System",
   "short_name": "Attendance",
-  "description": "System for tracking OJT attendance",
+  "description": "Smart RFID Attendance System with Real-Time Web Dashboard and Guardian Email Notifications.",
   "start_url": "index.php",
   "display": "standalone",
   "background_color": "#ffffff",
