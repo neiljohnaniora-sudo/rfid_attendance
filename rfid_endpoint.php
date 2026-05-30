@@ -17,7 +17,8 @@ if (isset($_GET['ping'])) {
 }
 
 function sendEmailNotification($to_email, $subject, $message) {
-    $google_script_url = "https://script.google.com/macros/s/AKfycbzeBMiEsKBheK6eaEIdHAjOOWFwFsKa0qaOfJeoyYbKO4FrCzyRpdPzcRioS-oC1fxoUw/exec";
+    // Ilisi ang PASTE_YOUR_NEW_LINK_HERE sa link nga imong gi-copy gikan sa bag-ong account
+    $google_script_url = "https://script.google.com/macros/s/AKfycbxfLIkutLhCsZsZcw-RN6kD_Y2emlbj0EFlqhN6vXmMaUQGn8xS9DpxYTc1daHQKbQ51Q/exec";
     
     // I-format ang parameters
     $query = http_build_query([
