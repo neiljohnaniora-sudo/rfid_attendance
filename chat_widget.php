@@ -19,8 +19,17 @@
         z-index: 10000;
         border: none;
         transition: transform 0.3s ease;
+        animation: bounceBtn 3s infinite;
     }
+    
+    @keyframes bounceBtn {
+        0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+        40% { transform: translateY(-10px); }
+        60% { transform: translateY(-5px); }
+    }
+
     #chat-toggle-btn:hover {
+        animation: none;
         transform: scale(1.1);
         background: #0056b3;
     }
@@ -62,10 +71,26 @@
         padding: 10px;
         background: #f9f9f9;
         font-size: 13px;
+        scrollbar-width: thin;
     }
-    .user-msg { text-align: right; color: #fff; background: #007bff; padding: 5px 10px; border-radius: 10px; margin-bottom: 5px; display: inline-block; float: right; clear: both;}
-    .bot-msg { text-align: left; color: #000; background: #e2e2e2; padding: 5px 10px; border-radius: 10px; margin-bottom: 5px; display: inline-block; float: left; clear: both;}
     
+    /* --- Message Layouts ug Avatar Logo --- */
+    .msg-wrapper { display: flex; margin-bottom: 12px; clear: both; width: 100%; box-sizing: border-box; }
+    .msg-wrapper.bot { justify-content: flex-start; align-items: flex-end; }
+    .msg-wrapper.user { justify-content: flex-end; }
+    
+    .bot-avatar { width: 28px; height: 28px; border-radius: 50%; margin-right: 8px; border: 1px solid #ccc; background: white; object-fit: contain; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    
+    .bot-msg { text-align: left; color: #1e293b; background: #e2e8f0; padding: 8px 12px; border-radius: 15px; border-bottom-left-radius: 3px; max-width: 80%; line-height: 1.4; }
+    .user-msg { text-align: right; color: #fff; background: #007bff; padding: 8px 12px; border-radius: 15px; border-bottom-right-radius: 3px; max-width: 80%; line-height: 1.4; }
+    
+    /* --- Typing Indicator Animation --- */
+    .typing-indicator { display: none; padding: 10px 14px; background: #e2e8f0; border-radius: 15px; border-bottom-left-radius: 3px; width: fit-content; }
+    .typing-indicator .dot { display: inline-block; width: 5px; height: 5px; background: #64748b; border-radius: 50%; margin: 0 2px; animation: bounceDot 1.4s infinite ease-in-out both; }
+    .typing-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounceDot { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
     .chat-suggestions {
         display: flex;
         flex-wrap: wrap;
@@ -102,11 +127,24 @@
 
 <div id="chat-container">
     <div class="chat-header">
-        <span><i class="fa-solid fa-robot"></i> System Support Bot</span>
+        <span style="display: flex; align-items: center; gap: 8px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" style="width: 22px; height: 22px; border-radius: 50%; background: white; padding: 2px;">
+            Support Bot
+        </span>
         <span class="close-chat" id="close-chat-btn"><i class="fa-solid fa-xmark"></i></span>
     </div>
     <div id="chatbox">
-        <div class="bot-msg"><b>Bot:</b> Hello! How can I help you with the system today?</div>
+        <div class="msg-wrapper bot">
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" class="bot-avatar">
+            <div class="bot-msg"><b>Bot:</b> Hello! How can I help you with the system today?</div>
+        </div>
+        <!-- Typing Indicator Container (Gitago By Default) -->
+        <div class="msg-wrapper bot" id="typing-indicator-container" style="display: none;">
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" class="bot-avatar">
+            <div class="typing-indicator" id="typing-indicator">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+        </div>
     </div>
     <div class="chat-suggestions">
         <span class="suggestion-chip">Reset Password</span>
@@ -209,20 +247,30 @@
             $value = $("#data").val();
             if($value.trim() === "") return; // Dili mu-send kung walay text
 
-            $msg = '<div class="user-msg">' + $value + '</div>';
-            $("#chatbox").append($msg);
+            $msg = '<div class="msg-wrapper user"><div class="user-msg">' + $value + '</div></div>';
+            // I-insert ang user message sa ibabaw sa typing indicator
+            $($msg).insertBefore("#typing-indicator-container");
             $("#data").val(''); 
 
-            $.ajax({
-                url: 'bot.php',
-                type: 'POST',
-                data: 'text='+$value,
-                success: function(result){
-                    $replay = '<div class="bot-msg"><b>Bot:</b> ' + result + '</div>';
-                    $("#chatbox").append($replay);
-                    $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
-                }
-            });
+            // Ipakita ang "Typing..." effect dayun scroll paubos
+            $("#typing-indicator-container").show();
+            $("#typing-indicator").css("display", "inline-block");
+            $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
+
+            // Magbutang og gamay nga delay (600ms) para realistic nga nag type ang bot una mo-reply
+            setTimeout(function() {
+                $.ajax({
+                    url: 'bot.php',
+                    type: 'POST',
+                    data: 'text='+$value,
+                    success: function(result){
+                        $("#typing-indicator-container").hide(); // Itago balik ang typing
+                        $replay = '<div class="msg-wrapper bot"><img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" class="bot-avatar"><div class="bot-msg"><b>Bot:</b> ' + result + '</div></div>';
+                        $($replay).insertBefore("#typing-indicator-container");
+                        $("#chatbox").scrollTop($("#chatbox")[0].scrollHeight);
+                    }
+                });
+            }, 600);
         });
     });
 </script>
