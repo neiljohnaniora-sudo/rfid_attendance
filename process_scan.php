@@ -8,7 +8,7 @@ if (isset($_POST['rfid'])) {
     $current_time = date('H:i:s');
 
     // KUHAON ANG SETTINGS NGA GIBUTANG SA ADMIN
-    $time_settings = ['late_time' => '08:00', 'timeout_start' => '15:00'];
+    $time_settings = ['timein_start' => '07:00', 'late_time' => '08:00', 'timeout_start' => '15:00'];
     if (file_exists('time_settings.json')) {
         $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
     }
@@ -55,7 +55,16 @@ if (isset($_POST['rfid'])) {
             }
         } else {
             // Kung wala pay record karong adlawa, mag insert ug Time-In
-            // Ma-Late kung lapas na sa 8:00 AM
+            
+            // I-CHECK KUNG SAYO PA BA KAAYO PARA MAG TIME IN
+            if (strtotime($current_time) < strtotime($time_settings['timein_start'] . ':00')) {
+                $action = "ERROR";
+                file_put_contents('latest_scan.json', json_encode(['timestamp'=>time(),'rfid'=>$rfid,'name'=>$student_name,'action'=>$action,'status'=>"Too Early"]));
+                echo json_encode(['success' => false, 'message' => "Too Early to Time In!<br>Wait until " . date("h:i A", strtotime($time_settings['timein_start']))]);
+                exit();
+            }
+
+            // Ma-Late kung lapas na sa late_time
             $status = (strtotime($current_time) > strtotime($time_settings['late_time'] . ':00')) ? 'Late' : 'On Time';
             
             $conn->query("INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 

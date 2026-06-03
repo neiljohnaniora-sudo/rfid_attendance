@@ -58,7 +58,7 @@ if (isset($_GET['rfid'])) {
     $rfid = $conn->real_escape_string($_GET['rfid']);
     
     // KUHAON ANG SETTINGS NGA GIBUTANG SA ADMIN
-    $time_settings = ['late_time' => '08:00', 'timeout_start' => '15:00'];
+    $time_settings = ['timein_start' => '07:00', 'late_time' => '08:00', 'timeout_start' => '15:00'];
     if (file_exists('time_settings.json')) {
         $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
     }
@@ -130,26 +130,33 @@ if (isset($_GET['rfid'])) {
         } else {
             
             // 👉 [ACTION: TIME IN]
-            // I-set kung Late ba (after 8:00 AM) o On Time
-            $status = (strtotime($current_time) > strtotime($time_settings['late_time'] . ':00')) ? 'Late' : 'On Time';
-            
-            $insert_sql = "INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 
-                           VALUES ('$today', '$rfid', '$student_name', '$current_time', '$status')";
-            
-            if ($conn->query($insert_sql) === TRUE) {
-                $action = "TIME IN";
-                
-                // Trigger Email Notification para sa Guardian
-                if (!empty($guardian_email)) {
-                    $subject = "Attendance Alert: TIME IN - " . $student_name;
-                    $msg = "Good day,\n\nNotice: Your child, $student_name, has safely logged IN to the school premises today at $display_time.\nStatus: $status\n\nThank you,\nSmart Attendance System";
-                    sendEmailNotification($guardian_email, $subject, $msg);
-                }
-                echo "SUCCESS: Time In - " . $student_name;
+            // I-CHECK KUNG SAYO PA BA KAAYO PARA MAG TIME IN
+            if (strtotime($current_time) < strtotime($time_settings['timein_start'] . ':00')) {
+                $action = "ERROR";
+                $status = "Too Early";
+                echo "WARNING: Too early to time in!";
             } else {
-                file_put_contents('db_error.txt', "INSERT ERR: " . $conn->error . "\n", FILE_APPEND);
-                echo "ERROR: Database Insert Failed";
-                exit();
+                // I-set kung Late ba (after late_time) o On Time
+                $status = (strtotime($current_time) > strtotime($time_settings['late_time'] . ':00')) ? 'Late' : 'On Time';
+                
+                $insert_sql = "INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 
+                               VALUES ('$today', '$rfid', '$student_name', '$current_time', '$status')";
+                
+                if ($conn->query($insert_sql) === TRUE) {
+                    $action = "TIME IN";
+                    
+                    // Trigger Email Notification para sa Guardian
+                    if (!empty($guardian_email)) {
+                        $subject = "Attendance Alert: TIME IN - " . $student_name;
+                        $msg = "Good day,\n\nNotice: Your child, $student_name, has safely logged IN to the school premises today at $display_time.\nStatus: $status\n\nThank you,\nSmart Attendance System";
+                        sendEmailNotification($guardian_email, $subject, $msg);
+                    }
+                    echo "SUCCESS: Time In - " . $student_name;
+                } else {
+                    file_put_contents('db_error.txt', "INSERT ERR: " . $conn->error . "\n", FILE_APPEND);
+                    echo "ERROR: Database Insert Failed";
+                    exit();
+                }
             }
         }
         

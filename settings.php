@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_profile'])) {
 // 2. TIME LIMITS SETTINGS LOGIC
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_time_settings'])) {
     $time_settings = [
+        'timein_start' => $_POST['timein_start'],
         'late_time' => $_POST['late_time'],
         'timeout_start' => $_POST['timeout_start']
     ];
@@ -155,11 +156,16 @@ $pending_result = ($admin_role === 'Admin') ? $conn->query("SELECT * FROM admins
                     <h3 class="section-title"><i class="fa-solid fa-clock"></i> Attendance Time Limits</h3>
                     <form method="POST">
                         <?php
-                        $time_settings = ['late_time' => '08:00', 'timeout_start' => '15:00'];
+                        $time_settings = ['timein_start' => '07:00', 'late_time' => '08:00', 'timeout_start' => '15:00'];
                         if (file_exists('time_settings.json')) {
                             $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
                         }
                         ?>
+                        <div class="form-group">
+                            <label>Minimum Time-In Allowed</label>
+                            <input type="time" name="timein_start" value="<?php echo htmlspecialchars($time_settings['timein_start']); ?>" required>
+                            <small style="color: #94a3b8; font-size: 11px;">Students cannot time in before this time.</small>
+                        </div>
                         <div class="form-group">
                             <label>Mark as "Late" After (Time In)</label>
                             <input type="time" name="late_time" value="<?php echo htmlspecialchars($time_settings['late_time']); ?>" required>

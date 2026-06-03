@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['uid'])) {
     $current_time = date("H:i:s");
 
     // KUHAON ANG SETTINGS NGA GIBUTANG SA ADMIN
-    $time_settings = ['late_time' => '08:00', 'timeout_start' => '15:00'];
+    $time_settings = ['timein_start' => '07:00', 'late_time' => '08:00', 'timeout_start' => '15:00'];
     if (file_exists('time_settings.json')) {
         $time_settings = array_merge($time_settings, json_decode(file_get_contents('time_settings.json'), true));
     }
@@ -52,17 +52,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['uid'])) {
                 $status_msg = "Already Out";
                 echo "Warning: Already timed out for today!";
             } else {
-                // Insert bag-ong Time-In
-                $status = (strtotime($current_time) > strtotime($time_settings['late_time'] . ':00')) ? 'Late' : 'On Time';
-                $insert_sql = "INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 
-                               VALUES ('$current_date', '$st_id', '$st_name', '$current_time', '$status')";
-                
-                if ($conn->query($insert_sql) === TRUE) {
-                    $action = "TIME IN";
-                    $status_msg = $status;
-                    echo "Success: Time-In recorded for " . $st_name;
+                if (strtotime($current_time) < strtotime($time_settings['timein_start'] . ':00')) {
+                    $action = "ERROR";
+                    $status_msg = "Too Early";
+                    echo "Warning: Too early to time in!";
                 } else {
-                    echo "Error: " . $conn->error;
+                    // Insert bag-ong Time-In
+                    $status = (strtotime($current_time) > strtotime($time_settings['late_time'] . ':00')) ? 'Late' : 'On Time';
+                    $insert_sql = "INSERT INTO attendance_logs (date, student_id, student_name, time_in, status) 
+                                   VALUES ('$current_date', '$st_id', '$st_name', '$current_time', '$status')";
+                    
+                    if ($conn->query($insert_sql) === TRUE) {
+                        $action = "TIME IN";
+                        $status_msg = $status;
+                        echo "Success: Time-In recorded for " . $st_name;
+                    } else {
+                        echo "Error: " . $conn->error;
+                    }
                 }
             }
         }
