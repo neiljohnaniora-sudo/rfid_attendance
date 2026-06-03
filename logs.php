@@ -11,13 +11,21 @@ if (!isset($_SESSION['admin_id'])) {
 require 'connection.php'; 
 date_default_timezone_set('Asia/Manila'); 
 
+// --- PHP LOGIC: DELETE LOG ---
+if (isset($_GET['delete_log_id'])) {
+    $stmt = $conn->prepare("DELETE FROM attendance_logs WHERE id = ?");
+    $stmt->bind_param("i", $_GET['delete_log_id']);
+    $stmt->execute();
+    header("Location: logs.php"); exit();
+}
+
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $date_filter = isset($_GET['date']) ? $_GET['date'] : '';
 
 $admin_role = isset($_SESSION['admin_role']) ? $_SESSION['admin_role'] : '';
 $assigned_grade = isset($_SESSION['assigned_grade']) ? $_SESSION['assigned_grade'] : '';
 
-$sql = "SELECT a.date, a.student_name, s.grade, a.time_in, a.time_out, a.status 
+$sql = "SELECT a.id, a.date, a.student_name, s.grade, a.time_in, a.time_out, a.status 
         FROM attendance_logs a LEFT JOIN students s ON a.student_id = s.rfid WHERE 1=1";
 
 // KINI ANG FILTER PARA SA TEACHER
@@ -73,6 +81,8 @@ $result = $conn->query($sql);
         .page-nav button { background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; margin-left: 8px; transition: 0.2s; }
         .page-nav button:hover:not(:disabled) { background: #eff6ff; border-color: #a5b4fc; }
         .page-nav button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-delete { color: #ef4444; font-size: 16px; transition: 0.2s; background: none; border: none; cursor: pointer; text-decoration: none; }
+        .btn-delete:hover { color: #991b1b; transform: scale(1.1); }
         
         @media (max-width: 768px) {
             .filter-row { flex-direction: column; align-items: stretch; }
@@ -132,6 +142,7 @@ $result = $conn->query($sql);
                             <th style="width: 100px;">Time In</th>
                             <th style="width: 100px;">Time Out</th>
                             <th style="width: 100px;">Status</th>
+                            <th style="width: 80px; text-align: center;">Action</th>
                         </tr>
                     </thead>
                     <tbody id="logsBody">
@@ -145,9 +156,14 @@ $result = $conn->query($sql);
                                 <td data-label="Time In"><?php echo date('h:i A', strtotime($row['time_in'])); ?></td>
                                 <td data-label="Time Out"><?php echo $row['time_out'] ? date('h:i A', strtotime($row['time_out'])) : '--'; ?></td>
                                 <td data-label="Status"><span class="badge <?php echo $b_class; ?>"><?php echo $row['status']; ?></span></td>
+                                <td data-label="Action" style="text-align: center;">
+                                    <a href="logs.php?delete_log_id=<?php echo $row['id']; ?>" class="btn-delete" onclick="return confirm('Delete this attendance log?')">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </a>
+                                </td>
                             </tr>
                         <?php endwhile; else: ?>
-                            <tr><td colspan="6" style="text-align:center; padding: 30px; color: #94a3b8;">No records found.</td></tr>
+                            <tr><td colspan="7" style="text-align:center; padding: 30px; color: #94a3b8;">No records found.</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
